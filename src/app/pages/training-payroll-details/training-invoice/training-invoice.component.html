@@ -1,0 +1,61 @@
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>سند</title>
+		<link rel="text/css" href="/src/app/pages/training-payroll-details/training-invoice/style.css">
+		<link rel="license" href="https://www.opensource.org/licenses/mit-license/">
+		<script src="script.js"></script>
+	</head>
+	<body>
+				<img alt="" src="../../../assets/financial.jpg" height="250" width="730">
+        <article>
+          <th style="color: rgb(0, 0, 0);text-align: center;border: 0; background-color: rgb(255, 255, 255);">مرتبات المتدربين</th><br>
+          <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">التاريخ</th><br>
+          <td style="text-align: center;">{{date}}</td>
+          <br>
+			<table class="inventory">
+				<thead>
+					<tr>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">اسم الموظف</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الإدارة</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">السنة</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الشهر</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">المبلغ</th>
+					</tr>
+				</thead><br>
+				<tbody>
+					<tr>
+						<td style="text-align: center;"><span >{{name}}</span></td>
+						<td style="text-align: center;"><span > {{dept}}</span></td>
+						<td style="text-align: center;"><span data-prefix> </span><span >{{year}}</span></td>
+						<td style="text-align: center;"><span >{{month}}</span></td>
+						<td style="text-align: center;font: bold;"><span data-prefix>{{amount}} ج. س</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</article>
+    <aside>
+			<br><br>
+			<br><br>
+			<br><br>
+			<br><br>
+			<br><br>
+			<br><br>
+			<h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">التوقيع</h1>
+			<br><br>
+            <table class="inventory">
+			<tr>
+                <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255)">توقيع المحاسب</th>
+                <td style="text-align: center;" style="text-align:center;">{{space}}</td>
+            </tr>
+			<br>
+			<br>
+            <tr>
+                <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">توقيع المتدرب</th>
+                <td style="text-align: center;" class="sh">{{space}} </td>
+            </tr>
+			</table>
+		</aside>
+  </body>
+</html>

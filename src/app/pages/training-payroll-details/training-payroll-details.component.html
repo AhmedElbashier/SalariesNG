@@ -1,0 +1,54 @@
+<div class="surface-section px-4 py-5 md:px-6 lg:px-8">
+  <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
+      <li>
+          <a class="text-500 no-underline line-height-3 cursor-pointer">صرف مرتب</a>
+      </li>
+      <li class="px-2">
+          <i class="pi pi-angle-right text-500 line-height-3"></i>
+      </li>
+      <li>
+          <span class="text-900 line-height-2">تفاصيل مرتب  {{name}}</span>
+      </li>
+  </ul>
+</div>
+
+
+<!-- <p-table   [tableStyle]="{'dir':'rtl', 'border':'1'}">
+  <ng-template pTemplate="header">
+      <tr>
+          <th>الاسم</th>
+          <th>القسم / الإدارة</th>
+          <th>المرتب</th>
+      </tr>
+      <tr>
+          <td>{{name}}</td>
+          <td>{{dept}}</td>
+          <td>{{amount}}</td>
+      </tr>
+      </ng-template>
+</p-table> -->
+
+
+<p-table [value]="Trainings" [tableStyle]="{'border':'1'}">
+  <ng-template pTemplate="header">
+      <tr>
+        <th style ="width: 20rem;text-align: center;" pSortableColumn="id">الاسم <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th style ="width: 20rem;text-align: center;"  pSortableColumn="name">القسم / الإدارة <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th  style ="width: 20rem;text-align: center;"  pSortableColumn="name">المرتب <p-sortIcon field="name"></p-sortIcon> </th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body">
+      <tr style="width: 3rem">
+        <td  style="width: 20rem;text-align: center;">{{name}}</td>
+        <td  style ="width: 20rem;text-align: center;" >{{dept}}</td>
+        <td  style ="width: 20rem;text-align: center;" >{{amount}}</td>
+      </tr>
+  </ng-template>
+</p-table>
+
+<br><br><br><br><br><br>
+<p-button label="   تأكيد الاستلام" icon="pi pi-check" iconPos="right"  [disabled]="Disabled" (onClick)="payRoll()" ></p-button>
+&nbsp;
+<p-button label="   طباعة الايصال" icon="pi pi-print" iconPos="right" (onClick)="print()"></p-button>

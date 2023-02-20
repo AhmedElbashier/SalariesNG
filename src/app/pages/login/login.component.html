@@ -1,0 +1,26 @@
+<br><br><br><br><br><br>
+<div class="surface-card p-4 shadow-2 border-round w-full lg:w-6" style="margin: auto;width: 50%;padding: 10px;">
+    <div class="text-center mb-2">
+        <img src="../../../assets/logo.png" alt="Image" height="250" class="mb-3">
+        <div class="text-900 text-3xl font-medium mb-3">مرحبا بك</div>
+        <span class="text-600 font-medium line-height-3">لا تمتلك حساب؟</span>
+        <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">قم بطلب حساب من الادارة</a>
+    </div>
+
+    <div>
+        <label for="username" class="block text-900 font-medium mb-2">اسم المستخدم</label>
+        <input id="username" type="text" [(ngModel)]="username" pInputText class="w-full mb-3">
+
+        <label for="password" class="block text-900 font-medium mb-2">كلمة المرور</label>
+        <input id="password" name="password" type="password"  [(ngModel)]="password" pInputText class="w-full mb-3">
+
+        <div class="flex align-items-center justify-content-between mb-6">
+            <div class="flex align-items-center">
+            </div>
+        </div>
+        <button pButton pRipple label="تسجيل دخول" icon="pi pi-user" class="w-full" (click)="login()"></button>
+    </div>
+</div>
+
+
+<p-toast position="top-center"></p-toast>

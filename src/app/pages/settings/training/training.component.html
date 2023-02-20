@@ -1,0 +1,121 @@
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="اضافة" icon="pi pi-plus" class="p-button-success p-mr-2"
+        (click)="openNew()"></button> &nbsp;&nbsp;&nbsp;&nbsp;
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <button pButton pRipple label="تصدير" icon="pi pi-upload" class="p-button-help" (click)="exportExcel()"></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="Trainings" [rows]="10" [paginator]="true"
+    [globalFilterFields]="['name','Training.name','Training.name','status']" [(selection)]="selectedTrainings"
+    [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-m-0">ادارة المتدرب </h5>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="بحث..." />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="id">الرقم <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">اسم الموظف <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">القسم <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Trainingname">المبلغ <p-sortIcon field="Trainingname"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-Training>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="Training"></p-tableCheckbox>
+        </td>
+        <td>{{Training.id}}</td>
+        <td>{{Training.name}}</td>
+        <td>{{Training.dept}}</td>
+        <td>{{Training.amount}}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            (click)="editTrainings(Training)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+            (click)="deleteTrainings(Training)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        يوجد عدد {{Trainings ? Trainings.length : 0 }} من الحزم.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="TrainingsDialog" [style]="{width: '450px'}" header="بيانات المتدرب" [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="Trainingname">اسم الموظف</label>
+      <input type="text" pInputText id="Trainingname" [(ngModel)]="Training.name" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Trainingname">اسم القسم</label>
+      <select id="state"  [(ngModel)]="department" Value="department.name" pInputText>
+        <option *ngFor="let department of departments" [ngValue]="department" >
+            {{department.name}}
+        </option>
+    </select>
+    </div>
+    <div class="p-field">
+      <label for="Trainingname">المبلغ</label>
+      <input type="text" pInputText id="Trainingname" [(ngModel)]="Training.amount" required autofocus />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+      (click)="saveTrainings(Training)"></button>
+    <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="TrainingsEditDialog" [style]="{width: '450px'}" header="بيانات المتدرب" [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="Trainingname">اسم الموظف</label>
+      <input type="text" pInputText id="Trainingname" [(ngModel)]="Training.name" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Trainingname">اسم القسم</label>
+      <select id="state"  [(ngModel)]="department" Value="department.name" pInputText>
+        <option *ngFor="let department of departments" [ngValue]="department" >
+            {{department.name}}
+        </option>
+    </select>    </div>
+    <div class="p-field">
+      <label for="Trainingname">المبلغ</label>
+      <input type="text" pInputText id="Trainingname" [(ngModel)]="Training.amount" required autofocus />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+      (click)="editTrainingsD(Training)"></button>
+    <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -1,0 +1,205 @@
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="اضافة" icon="pi pi-plus" class="p-button-success p-mr-2"
+                (click)="openNew()"></button> &nbsp;&nbsp;&nbsp;&nbsp;
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            <button pButton pRipple label="تصدير" icon="pi pi-upload" class="p-button-help" (click)="exportExcel()" ></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="DegreeRollers" [rows]="10" [paginator]="true"
+        [globalFilterFields]="['name','DegreeRoller.name','DegreeRoller.name','status']" [(selection)]="selectedDegreeRollers" [rowHover]="true"
+        dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">ادارة مدخل الدرجة</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')"
+                        placeholder="بحث..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="id">الرقم <p-sortIcon field="id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="name">نوع الوظيفة <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="DegreeRollername">نوع التعيين <p-sortIcon field="DegreeRollername"></p-sortIcon></th>
+                <th pSortableColumn="DegreeRollername">سنين الخبرة <p-sortIcon field="DegreeRollername"></p-sortIcon></th>
+                <th pSortableColumn="DegreeRollername">القيمة <p-sortIcon field="DegreeRollername"></p-sortIcon></th>
+                <th pSortableColumn="DegreeRollername">المرتب الأساسي <p-sortIcon field="DegreeRollername"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-DegreeRoller>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="DegreeRoller"></p-tableCheckbox>
+                </td>
+                <td>{{DegreeRoller.id}}</td>
+                <td>{{DegreeRoller.name}}</td>
+                <td>{{DegreeRoller.empType}}</td>
+                <td>{{DegreeRoller.exp}}</td>
+                <td>{{DegreeRoller.value}}</td>
+                <td>{{DegreeRoller.primarySalary}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        (click)="editDegreeRollers(DegreeRoller)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteDegreeRollers(DegreeRoller)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                يوجد عدد {{DegreeRollers ? DegreeRollers.length : 0 }} من مدخل الدرجة.
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="DegreeRollersDialog" [style]="{width: '450px'}" header="بيانات مدخل الدرجة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="state">نوع الوظيفة</label>
+            <select id="state"  (change)="Type(DegreeRoller.name)" [(ngModel)]="DegreeRoller.name" Value="role" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    أكاديمي
+                </option>
+                <option>
+                    إداري
+                </option>
+            </select>
+        </div>
+        <div class="p-field">
+            <label for="DegreeRollername">القيمة</label>
+            <input type="text" pInputText id="DegreeRollername" [(ngModel)]="DegreeRoller.value" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="DegreeRollername">المرتب الأساسي</label>
+            <input type="text" pInputText id="DegreeRollername" [(ngModel)]="DegreeRoller.primarySalary" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="DegreeRollername">سنين الخبرة</label>
+            <input type="text" pInputText id="DegreeRollername" [(ngModel)]="DegreeRoller.exp" required autofocus />
+        </div>
+        
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="saveDegreeRollers(DegreeRoller)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="DegreeRollersEditDialog" [style]="{width: '450px'}" header="بيانات مدخل الدرجة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="state">نوع الوظيفة</label>
+            <select id="state" (change)="Type(DegreeRoller.name)" [(ngModel)]="DegreeRoller.name" Value="role" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    أكاديمي
+                </option>
+                <option>
+                    إداري
+                </option>
+            </select>
+        </div>
+        <div class="p-field">
+            <label for="DegreeRollername">القيمة</label>
+            <input type="text" pInputText id="DegreeRollername" [(ngModel)]="DegreeRoller.value" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="DegreeRollername">المرتب الأساسي</label>
+            <input type="text" pInputText id="DegreeRollername" [(ngModel)]="DegreeRoller.primarySalary" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="DegreeRollername">سنين الخبرة</label>
+            <input type="text" pInputText id="DegreeRollername" [(ngModel)]="DegreeRoller.exp" required autofocus />
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="editDegreeRollersD(DegreeRoller)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="AdminsDialog" [style]="{width: '450px'}" header="بيانات مدخل الدرجة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="state">نوع التعيين</label>
+            <select id="state" [(ngModel)]="DegreeRoller.empType" Value="DegreeRoller.empType" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    عمادة و مدراء إدارات
+                </option>
+                <option>
+                    موظفين
+                </option>
+                <option>
+                    ملازمين معامل
+                </option>
+                <option>
+                    تقنين
+                </option>
+                <option>
+                    استقبال و حرس
+                </option>
+                <option>
+                    متدربين
+                </option>
+            </select>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="SaveAdminType()"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideTypeDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="AcademicsDialog" [style]="{width: '450px'}" header="بيانات مدخل الدرجة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="state">نوع التعيين</label>
+            <select id="state"[(ngModel)]="DegreeRoller.empType" Value="DegreeRoller.empType" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    مساعد تدريس
+                </option>
+                <option>
+                    محاضر
+                </option>
+                <option>
+                    محاضر مساعد
+                </option>
+                <option>
+                    دكتور
+                </option>
+                <option>
+                    بروف
+                </option>
+            </select>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="SaveAcademicType()"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideTypeDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

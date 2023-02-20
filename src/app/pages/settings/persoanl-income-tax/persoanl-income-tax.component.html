@@ -1,0 +1,116 @@
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="اضافة" icon="pi pi-plus" class="p-button-success p-mr-2"
+                (click)="openNew()"></button> &nbsp;&nbsp;&nbsp;&nbsp;
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            <button pButton pRipple label="تصدير" icon="pi pi-upload" class="p-button-help" (click)="exportExcel()" ></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="PersonalIncomeTaxs" [rows]="10" [paginator]="true"
+        [globalFilterFields]="['name','PersonalIncomeTax.name','PersonalIncomeTax.name','status']" [(selection)]="selectedPersonalIncomeTaxs" [rowHover]="true"
+        dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">ادارة الدمغة على الشخص</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')"
+                        placeholder="بحث..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="id">الرقم <p-sortIcon field="id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="name">نوع الوظيفة <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="PersonalIncomeTaxname">القيمة <p-sortIcon field="PersonalIncomeTaxname"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-PersonalIncomeTax>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="PersonalIncomeTax"></p-tableCheckbox>
+                </td>
+                <td>{{PersonalIncomeTax.id}}</td>
+                <td>{{PersonalIncomeTax.name}}</td>
+                <td>{{PersonalIncomeTax.value}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        (click)="editPersonalIncomeTaxs(PersonalIncomeTax)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deletePersonalIncomeTaxs(PersonalIncomeTax)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                يوجد عدد {{PersonalIncomeTaxs ? PersonalIncomeTaxs.length : 0 }} من الدمغات.
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="PersonalIncomeTaxsDialog" [style]="{width: '450px'}" header="بيانات الدمغة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="state">نوع الوظيفة</label>
+            <select id="state"  [(ngModel)]="PersonalIncomeTax.name" Value="role" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    أكاديمي
+                </option>
+                <option>
+                    إداري
+                </option>
+            </select>
+        </div>
+        <div class="p-field">
+            <label for="PersonalIncomeTaxname">القيمة</label>
+            <input type="text" pInputText id="PersonalIncomeTaxname" [(ngModel)]="PersonalIncomeTax.value" required autofocus />
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="savePersonalIncomeTaxs(PersonalIncomeTax)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="PersonalIncomeTaxsEditDialog" [style]="{width: '450px'}" header="بيانات الدمغة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="state">نوع الوظيفة</label>
+            <select id="state"  [(ngModel)]="PersonalIncomeTax.name" Value="role" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    أكاديمي
+                </option>
+                <option>
+                    إداري
+                </option>
+            </select>
+        </div>
+        <div class="p-field">
+            <label for="PersonalIncomeTaxname">القيمة</label>
+            <input type="text" pInputText id="PersonalIncomeTaxname" [(ngModel)]="PersonalIncomeTax.value" required autofocus />
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="editPersonalIncomeTaxsD(PersonalIncomeTax)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

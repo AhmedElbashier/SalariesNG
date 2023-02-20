@@ -1,0 +1,153 @@
+
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="اضافة" icon="pi pi-plus" class="p-button-success p-mr-2"
+                (click)="openNew()"></button> &nbsp;&nbsp;&nbsp;&nbsp;
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            <button pButton pRipple label="تصدير" icon="pi pi-upload" class="p-button-help" (click)="exportExcel()" ></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="users" [rows]="10" [paginator]="true"
+        [globalFilterFields]="['name','user.name','user.name','status']" [(selection)]="selectedUsers" [rowHover]="true"
+        dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">ادارة المستخدمين</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')"
+                        placeholder="بحث..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="id">الرقم <p-sortIcon field="id"></p-sortIcon>
+                </th>
+                <th pSortableColumn="name">الاسم <p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="username">اسم المستخدم <p-sortIcon field="username"></p-sortIcon>
+                </th>
+                <th pSortableColumn="password">كلمة المرور <p-sortIcon field="Password"></p-sortIcon>
+                </th>
+
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                </td>
+                <td>{{user.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.username}}</td>
+                <td>************</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        (click)="editUser(user)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteUser(user)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                يوجد عدد {{users ? users.length : 0 }} من المستخدمين.
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="بيانات المستخدم" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="name">الاسم بالكامل</label>
+            <input type="text" pInputText id="name" [(ngModel)]="user.name" required autofocus />
+            <small class="p-invalid" *ngIf="submitted && !user.name">Name is required.</small>
+        </div>
+        <div class="p-field">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" pInputText id="username" [(ngModel)]="user.username" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="password">كلمة المرور</label>
+            <input type="text" pInputText id="password" [(ngModel)]="user.password" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="state">الصلاحية</label>
+            <select id="state"  [(ngModel)]="user.role" Value="role" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    مدير
+                </option>
+                <option>
+                    ادخال
+                </option>
+                <option>
+                    صرف
+                </option>
+                <option>
+                    تقارير
+                </option>
+            </select>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="saveUser(user)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="userEditDialog" [style]="{width: '450px'}" header="بيانات المستخدم" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="name">الاسم بالكامل</label>
+            <input type="text" pInputText id="name" [(ngModel)]="user.name" required autofocus />
+            <small class="p-invalid" *ngIf="submitted && !user.name">Name is required.</small>
+        </div>
+        <div class="p-field">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" pInputText id="username" [(ngModel)]="user.username" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="password">كلمة المرور</label>
+            <input type="text" pInputText id="password" [(ngModel)]="user.password" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="state">الصلاحية</label>
+            <select id="state"  [(ngModel)]="user.role" Value="role" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                    مدير
+                </option>
+                <option>
+                    ادخال
+                </option>
+                <option>
+                    صرف
+                </option>
+                <option>
+                    تقارير
+                </option>
+            </select>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text" (click)="editUserD(user)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<!-- <p-toast></p-toast> -->

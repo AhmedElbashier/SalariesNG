@@ -1,0 +1,149 @@
+<div class="surface-section">
+    <!-- <img src="assets/logo.jpeg" width="250" /> -->
+    <div class="font-medium text-3xl text-900 mb-3">بيانات الموظف</div>
+    <div class="text-500 mb-5">رقم {{Emp.id}}</div>
+    <ul class="list-none p-0 m-0">
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">اسم الموظف</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.name}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">اسم القسم</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.dept}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">عدد سنين الخبرة</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.exp}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+
+        </li>
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">عدد سنين الخبرةالداخلية</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.internalExp}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">رقم حساب بنك فيصل الإسلامي</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.fib}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">رقم حساب بنك الخرطوم</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.bok}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">نوع التوظيف</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.type}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">تاريخ التعيين</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.recuirtDate}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+        <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+            <div class="text-500 w-6 md:w-2 font-medium">الرقم الوطني</div>
+            <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">{{Emp.nationalId}}</div>
+            <div class="w-6 md:w-2 flex justify-content-end">
+            </div>
+        </li>
+
+
+        <button pButton pRipple label="  تعديل بيانات الموظف    " icon="pi pi-pencil" class="p-button-text"
+            (click)="editEmp(Emp)"></button>
+
+    </ul>
+
+</div>
+
+<p-toast></p-toast>
+
+<p-dialog [(visible)]="detailDialog" [style]="{width: '450px'}" header="بيانات الوحدة" [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="id">رقم الموظف</label>
+            <input readonly type="text" pInputText id="id" [(ngModel)]="detail.id" required autofocus />
+            <small class="p-invalid" *ngIf="submitted && !detail.id">Required.</small>
+        </div>
+        <div class="p-field">
+            <label for="name">اسم الموظف</label>
+            <input id="Emp.name" [(ngModel)]="Emp.name"
+            name="Emp.name" type="text" pInputText class="w-full mb-3">
+        </div>
+        <div class="p-field">
+            <label for="dept">اسم القسم</label>
+            <select id="state"  [(ngModel)]="detail.dept" Value="detail.dept" pInputText class="w-full mb-3">
+                <option *ngFor="let department of departments" [ngValue]="detail.dept" >
+                    {{department.name}}
+                </option>
+            </select>        </div>
+        <div class="p-field">
+            <label for="exp">عدد سنين الخبرة</label>
+            <input type="text" pInputText id="exp" [(ngModel)]="detail.exp" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="internalExp">عدد سنين الخبرة الداخلية</label>
+            <input type="text" pInputText id="internalExp" [(ngModel)]="detail.internalExp" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="electericAccount">نوع التوظيف</label>
+            <select id="state"  [(ngModel)]="detail.type" value="{{detail.type}}" name="detail.type" pInputText class="w-full mb-3">
+                <option>
+                    {{detail.type}}
+                </option>
+                <option>
+                    عمادة و مدراء إدارات
+                </option>
+                <option>
+                    موظفين
+                </option>
+                <option>
+                    ملازمين معامل
+                </option>
+                <option>
+                    تقنين
+                </option>
+                <option>
+                    استقبال و حرس
+                </option>
+                <option>
+                    متدربين
+                </option>
+            </select>
+        </div>
+        <div class="p-field">
+            <label for="recuirtDate">تاريخ التعيين</label>
+            <input type="date" pInputText id="recuirtDate" [(ngModel)]="detail.recuirtDate" required autofocus />
+        </div>
+        <div class="p-field">
+            <label for="nationalId">الرقم الوطني</label>
+            <input type="text" pInputText id="nationalId" [(ngModel)]="detail.nationalId" required autofocus />
+        </div>
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+            (click)="editEmpD(detail)"></button>
+        <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
