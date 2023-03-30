@@ -8,6 +8,7 @@ export class CommonService {
   UserUrl = this.APIUrl + "/User";
   UserByNameUrl = this.APIUrl + "/User/ByName";
   PerformanceIncentiveUrl = this.APIUrl + "/PerformanceIncentive";
+  PerformanceIncentiveByNameUrl = this.APIUrl +"/PerformanceIncentive/ByName";
   InternalExperienceUrl = this.APIUrl + "/InternalExperience";
   InternalExperienceByNameUrl = this.APIUrl + "/InternalExperience/ByName";
   DegreeRollerUrl = this.APIUrl + "/DegreeRoller";
@@ -24,6 +25,7 @@ export class CommonService {
   StampSignUrl = this.APIUrl + "/StampSign";
   StampSignByNameUrl = this.APIUrl + "/StampSign/ByName";
   BooksAndResearchUrl = this.APIUrl + "/BookAndSearch";
+  BooksAndResearchByNameUrl = this.APIUrl + "/BookAndSearch/ByName";
   PackageUrl=this.APIUrl+"/Package";
   PackagePayRoll=this.APIUrl+"/PackagePayRoll";
   PackagePayRolByIdUrl=this.APIUrl+"/PackagePayRoll/ByIdAndMonth";
@@ -39,4 +41,21 @@ export class CommonService {
   EmpByTtUrl = this.APIUrl+"/Employee/ByTt";
   PayRollUrl = this.APIUrl+"/PayRoll";
   PayRollByIdAndMonthUrl = this.APIUrl+"/PayRoll/ByIdAndMonth";
+  AbsenceUrl = this.APIUrl+"/Absence";
+  AbsenceByNameAndMonthUrl = this.APIUrl+"/Absence/ByNameAndMonth";
+  AbsenceByEmpId = this.APIUrl+"/Absence/ByEmpId";
+  AdvanceUrl = this.APIUrl+"/Advance";
+  AdvanceByNameAndMonthUrl = this.APIUrl+"/Advance/ByNameAndMonth";
+  AdvanceByEmpId = this.APIUrl+"/Advance/ByEmpId";
+  AdvanceAccountUrl = this.APIUrl+"/AdvanceAccount";
+  AdvanceAccountByNameAndMonthUrl = this.APIUrl+"/AdvanceAccount/ByNameAndMonth";
+  AdvanceAccountByEmpId = this.APIUrl+"/AdvanceAccount/ByEmpId";
+  AllowanceUrl = this.APIUrl+"/Allowance";
+  AllowanceByNameUrl = this.APIUrl+"/Allowance/ByName";
+  PartialUrl = this.APIUrl+"/Partial";
+  PartialByNameUrl = this.APIUrl+"/Partial/ByName";
+  PartialPayRollUrl = this.APIUrl+"/PartialPayRoll";
+  PartialPayRollByNameUrl = this.APIUrl+"/PartialPayRoll/ByName";
+  PartialPayRollByIdAndMonthUrl = this.APIUrl+"/PartialPayRoll/ByIdAndMonth";
+  RoleUrl = this.APIUrl + "/Role";
 }

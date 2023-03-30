@@ -1,3 +1,13 @@
+import { PartialPayRollComponent } from './pages/partial-pay-roll/partial-pay-roll.component';
+import { PartialComponent } from './pages/settings/partial/partial.component';
+import { AllowanceComponent } from './pages/settings/allowance/allowance.component';
+import { AdvanceDetailsComponent } from './pages/settings/advance-details/advance-details.component';
+import { AbsenceComponent } from './pages/settings/absence/absence.component';
+import { AdvancesComponent } from './pages/settings/advances/advances.component';
+import { AcademicInvoiceTwoComponent } from './pages/academic-payroll-details/academic-invoice-two/academic-invoice-two.component';
+import { AcademicInvoiceOneComponent } from './pages/academic-payroll-details/academic-invoice-one/academic-invoice-one.component';
+import { AdminInvoiceTwoComponent } from './pages/admin-payroll-details/admin-invoice-two/admin-invoice-two.component';
+import { AdminInvoiceOneComponent } from './pages/admin-payroll-details/admin-invoice-one/admin-invoice-one.component';
 import { PackageInvoiceComponent } from './pages/package-payroll-details/package-invoice/package-invoice.component';
 import { TrainingInvoiceComponent } from './pages/training-payroll-details/training-invoice/training-invoice.component';
 import { TrainingPayrollDetailsComponent } from './pages/training-payroll-details/training-payroll-details.component';
@@ -36,12 +46,19 @@ import { StampSignComponent } from './pages/settings/stamp-sign/stamp-sign.compo
 import { TaxOnVariableAllowancesComponent } from './pages/settings/tax-on-variable-allowances/tax-on-variable-allowances.component';
 import { UsersComponent } from './pages/settings/users/users.component';
 import { StatiscsComponent } from './pages/statiscs/statiscs.component';
+import { PartialPayRollDetailsComponent } from './pages/partial-pay-roll-details/partial-pay-roll-details.component';
+import { PartialInvoiceComponent } from './pages/partial-pay-roll-details/partial-invoice/partial-invoice.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
   { path: 'login', component: LoginComponent },
   { path: 'trainingInvoice', component: TrainingInvoiceComponent },
   { path: 'packageInvoice', component: PackageInvoiceComponent },
+  { path: 'adminInvoiceOne', component: AdminInvoiceOneComponent },
+  { path: 'adminInvoiceTwo', component: AdminInvoiceTwoComponent },
+  { path: 'academicInvoiceOne', component: AcademicInvoiceOneComponent },
+  { path: 'academicInvoiceTwo', component: AcademicInvoiceTwoComponent },
+  { path: 'partialInvoice', component: PartialInvoiceComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
@@ -60,6 +77,12 @@ const routes: Routes = [
       { path: 'packagePayrollDetails', component: PackagePayrollDetailsComponent },
       { path: 'trainingPayRoll', component: TrainingPayrollComponent },
       { path: 'trainingPayRollDetails', component: TrainingPayrollDetailsComponent },
+      { path: 'advance', component: AdvancesComponent },
+      { path: 'advanceDetails', component: AdvanceDetailsComponent },
+      { path: 'absence', component: AbsenceComponent },
+      { path: 'partialPayRoll', component: PartialPayRollComponent },
+      { path: 'partialPayRollDetails', component: PartialPayRollDetailsComponent },
+
       {
         path: 'academicPayrollDetails',
         component: AcademicPayrollDetailsComponent,
@@ -105,6 +128,8 @@ const routes: Routes = [
           { path: 'training', component: TrainingComponent },
           { path: 'department', component: DepartmentComponent },
           { path: 'personalIncomeTax', component: PersoanlIncomeTaxComponent },
+          { path: 'allowance', component: AllowanceComponent },
+          { path: 'partial', component: PartialComponent },
         ],
       },
     ],

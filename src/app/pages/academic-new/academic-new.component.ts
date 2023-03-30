@@ -83,7 +83,7 @@ export class AcademicNewComponent {
     this.Emp.nationalId = natioanlID;
     this.Emp.type = type;
     this.Emp.tt = "أكاديمي";
-
+    this.Emp.rate = '1';
     this.EmpService.addEmp(this.Emp);
     this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تمت اضافة الموظف بنجاح', life: 3000 });
     this.Emp = {};

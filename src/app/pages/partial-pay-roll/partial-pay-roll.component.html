@@ -1,0 +1,168 @@
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="اضافة" icon="pi pi-plus" class="p-button-success p-mr-2"
+        (click)="openNew()"></button> &nbsp;&nbsp;&nbsp;&nbsp;
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <button pButton pRipple label="تصدير" icon="pi pi-upload" class="p-button-help" (click)="exportExcel()"></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="Partials" [rows]="10" [paginator]="true"
+    [globalFilterFields]="['name','Partial.name','Partial.name','status']" [(selection)]="selectedPartials"
+    [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-m-0">ادارة الموظف الجزئي </h5>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="بحث..." />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="id">الرقم <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">اسم الموظف <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">قيمة العقد الجزئي <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Partialname">الراتب الأساسي <p-sortIcon field="Partialname"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-Partial>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="Partial"></p-tableCheckbox>
+        </td>
+        <td>{{Partial.id}}</td>
+        <td>{{Partial.name}}</td>
+        <td>{{Partial.contractValue}}</td>
+        <td>{{Partial.primarySalary}}</td>
+        <td>
+          <button pButton type="button" class="p-button-secondary" icon="pi pi-cog" (click)="details(Partial)"></button>
+          <!-- <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+            (click)="deletePartials(Partial)"></button> -->
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        يوجد عدد {{Partials ? Partials.length : 0 }} من الحزم.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="PartialsDialog" [style]="{width: '450px'}" header="بيانات الموظف الجزئي" [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="Partialname">اسم الموظف</label>
+      <input type="text" pInputText id="Partialname" [(ngModel)]="Partial.name" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Partialname">القسم</label>
+      <input type="text" pInputText id="Partialname" [(ngModel)]="Partial.contractValue" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Partialname">المبلغ</label>
+      <input type="text" pInputText id="Partialname" [(ngModel)]="Partial.primarySalary" required autofocus />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+      (click)="savePartials(Partial)"></button>
+    <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="PartialsEditDialog" [style]="{width: '450px'}" header="بيانات الموظف الجزئي" [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="Partialname">اسم الموظف</label>
+      <input type="text" pInputText id="Partialname" [(ngModel)]="Partial.name" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Partialname">القسم</label>
+      <input type="text" pInputText id="Partialname" [(ngModel)]="Partial.contractValue" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Partialname">المبلغ</label>
+      <input type="text" pInputText id="Partialname" [(ngModel)]="Partial.primarySalary" required autofocus />
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+      (click)="editPartialsD(Partial)"></button>
+    <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+
+
+
+
+
+<p-dialog [(visible)]="MonthDialog" [style]="{width: '450px'}" header="الرجاء تحديد الشهر" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+          <div class="p-field">
+              <label for="state">الشهر</label>
+              <select id="state"  [(ngModel)]="month" Value="month" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                <option>
+                  1
+              </option>
+              <option>
+                  2
+              </option>
+              <option>
+                  3
+              </option>
+              <option>
+                  4
+              </option>
+              <option>
+                  5
+              </option>
+              <option>
+                6
+            </option>
+              <option>
+                  7
+              </option>
+              <option>
+                  8
+              </option>
+              <option>
+                  9
+              </option>
+              <option>
+                  10
+              </option>
+              <option>
+                  11
+              </option>
+              <option>
+                  12
+              </option>
+              </select>
+          </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+      <button pButton pRipple label="استمرار" icon="pi pi-check" class="p-button-text" (click)="detailsD(month)"></button>
+      <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>

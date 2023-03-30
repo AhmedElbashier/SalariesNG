@@ -79,7 +79,8 @@ export class TrainingPayrollComponent {
     this.Training = Training;
   }
   async detailsD(month: any) {
-    this.TrainingPayRolls = await this.settingService.getTrainingPayRollById(this.Training.id,month);
+    const y= new Date().getFullYear().toString();
+    this.TrainingPayRolls = await this.settingService.getTrainingPayRollById(this.Training.id,month,y);
     if (Object.keys(this.TrainingPayRolls).length===0) {
     localStorage.setItem("trainingMonth", month);
     localStorage.setItem("trainingId", this.Training.id);

@@ -34,6 +34,24 @@ export interface PayRoll {
   deportationExpense:any;
   empType:any;
   valid:any;
+  bookAndResearch:any;
+  discountsTotal:any;
+  absenceLastValue:any;
+  firstTableTotal:any
+  secondTableTotal:any
+  allowance1:any;
+  allowance2:any;
+  allowance3:any;
+  allowance4:any;
+  allowance5:any;
+  allowanceV1:any;
+  allowanceV2:any;
+  allowanceV3:any;
+  allowanceV4:any;
+  allowanceV5:any;
+  taxAbsenceLastValue:any;
+  discountsSecondTotal:any;
+  lastAllTotalRoll:any;
 }
 @Injectable({
   providedIn: 'root'
@@ -52,8 +70,8 @@ export class PayRollService {
   getPayRoll(PayRollId: any = null): Observable<PayRoll> {
     return this.http.get<PayRoll>(this.common.PayRollUrl+"/"+PayRollId);
   }
-  getPayRollPromise(month: any = null,empId: any = null): Promise<any> {
-    return this.http.get<any>(this.common.PayRollByIdAndMonthUrl+"/"+month+"/"+empId).toPromise();
+  getPayRollPromise(empId: any = null,month: any = null,year: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PayRollByIdAndMonthUrl+"/"+empId+"/"+month+"/"+year).toPromise();
   }
   // getPayRollsByTt(PayRollloyeeTt: any = null): Observable<any[]> {
   //   return this.http.get<PayRoll[]>(this.common.PayRollByTtUrl + "/"+ PayRollloyeeTt);

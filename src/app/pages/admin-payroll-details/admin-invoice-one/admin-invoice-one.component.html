@@ -1,0 +1,108 @@
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>سند</title>
+		<link rel="text/css" href="/src/app/pages/training-payroll-details/training-invoice/style.css">
+		<link rel="license" href="https://www.opensource.org/licenses/mit-license/">
+		<script src="script.js"></script>
+	</head>
+	<body>
+				<img alt="" src="../../../assets/financial.jpg" height="200" width="700">
+        <article>
+          <th style="color: rgb(0, 0, 0);text-align: center;border: 0; background-color: rgb(255, 255, 255);">{{type}}</th><br>
+          <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">التاريخ</th><br>
+          <td style="text-align: center;">{{date}}</td>
+          <br>
+			<table class="inventory">
+				<thead>
+					<tr>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">اسم الموظف</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الإدارة</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">السنة</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الشهر</th>
+						<!-- <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">المبلغ</th> -->
+					</tr>
+				</thead><br>
+				<tbody>
+					<tr>
+						<td style="text-align: center;"><span >{{empName}}</span></td>
+						<td style="text-align: center;"><span > {{dept}}</span></td>
+						<td style="text-align: center;"><span data-prefix> </span><span >{{year}}</span></td>
+						<td style="text-align: center;"><span >{{month}}</span></td>
+						<!-- <td style="text-align: center;font: bold;"><span data-prefix>{{primarySalary}} ج. س</span></td> -->
+					</tr>
+				</tbody>
+			</table>
+      <table class="inventory">
+				<thead>
+					<tr>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الراتب الإبتدائي</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">غلاء المعيشة</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">بدل الترحيل</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">بدل السكن</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">مجموع الراتب الأساسي</th>
+					</tr>
+				</thead><br>
+				<tbody>
+					<tr>
+						<td style="text-align: center;"><span >{{startingSalary}}</span></td>
+						<td style="text-align: center;"><span > {{livingExpense}}</span></td>
+						<td style="text-align: center;"><span data-prefix> </span><span >{{deportationExpense}}</span></td>
+						<td style="text-align: center;"><span >{{housingExpense}}</span></td>
+						<td style="text-align: center;"><span >{{primarySalary}}</span></td>
+						<!-- <td style="text-align: center;font: bold;"><span data-prefix>{{primarySalary}} ج. س</span></td> -->
+					</tr>
+				</tbody>
+			</table>
+      <table class="inventory">
+				<thead>
+					<tr>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">التأمين الإجتماعي 8%</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الوعاء الخاضغ للضريبة</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">ضريبة الدخل الشخصي</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">مجموع الخصومات</th>
+					</tr>
+				</thead><br>
+				<tbody>
+					<tr>
+						<td style="text-align: center;"><span >{{firstInsurance}}</span></td>
+						<td style="text-align: center;"><span > {{theBaseSubjectTax}}</span></td>
+						<td style="text-align: center;"><span data-prefix> </span><span >{{personalTax}}</span></td>
+						<td style="text-align: center;"><span >{{discountsTotal}}</span></td>
+						<!-- <td style="text-align: center;font: bold;"><span data-prefix>{{primarySalary}} ج. س</span></td> -->
+					</tr>
+				</tbody>
+			</table>
+      <table class="inventory">
+				<thead>
+					<tr>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">السلفيات</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">الغياب و التأخير</th>
+						<th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">المجموع</th>
+					</tr>
+				</thead><br>
+				<tbody>
+					<tr>
+						<td style="text-align: center;"><span >0</span></td>
+						<td style="text-align: center;"><span > {{absenceLastValue}}</span></td>
+						<td style="text-align: center;"><span data-prefix> </span><span >{{absenceLastValue}}</span></td>
+					</tr>
+				</tbody>
+			</table>
+      <br>
+            <table class="inventory">
+
+			<tr>
+                <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255)">توقيع المحاسب</th>
+                <td style="text-align: center;" style="text-align:center;">{{space}}</td>
+            </tr>
+            <br>
+            <tr>
+                <th style="color: rgb(0, 0, 0);text-align: center; background-color: rgb(255, 255, 255);">توقيع الموظف</th>
+                <td style="text-align: center;" class="sh">{{space}} </td>
+            </tr>
+			</table>
+		</article>
+  </body>
+</html>

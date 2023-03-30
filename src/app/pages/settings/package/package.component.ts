@@ -83,6 +83,7 @@ export class PackageComponent {
     {
       Packages.period = "2";
       Packages.secondMonth = parseInt(Packages.firstMonth)+1;
+      Packages.thirdMonth = "0";
     }
     else if(Packages.period=="ثلاثة أشهر")
     {
@@ -91,6 +92,10 @@ export class PackageComponent {
       Packages.thirdMonth = parseInt(Packages.firstMonth)+2;
     }
       this.submitted = true;
+      Packages.firstMonthPayRoll = parseInt(Packages.firstMonth);
+      Packages.secondMonthPayRoll = parseInt(Packages.secondMonth);
+      Packages.thirdMonthPayRoll = parseInt(Packages.thirdMonth);
+      console.log(Packages);
       this.settingService.addPackage(Packages);
       this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تمت اضافة الحزمة بنجاح', life: 3000 });
       this.Packages = [...this.Packages];

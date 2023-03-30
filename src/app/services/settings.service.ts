@@ -118,6 +118,86 @@ export interface Department {
   name?: any;
   type?: any;
 }
+export interface Absence {
+  id?: any;
+  name?: any;
+  empId?: any;
+  month?: any;
+  year?: any;
+  hours?: any;
+}
+export interface Advance {
+  id?: any;
+  empName?: any;
+  empId?: any;
+  amount?: any;
+  periodLeft?: any;
+  period?: any;
+}
+export interface AdvanceAccount {
+  id?: any;
+  empName?: any;
+  empId?: any;
+  debit?: any;
+  credit?: any;
+  firstMonth?: any;
+  lastMonth?: any;
+}
+export interface Allowance {
+  id?: any;
+  name?: any;
+  percentage?: any;
+}
+export interface Partial {
+  id?: any;
+  name?: any;
+  exp?: any;
+  degreeRoller?: any;
+  academicAllowance?: any;
+  administrativeAssignment?: any;
+  contractValue?: any;
+  primarySalary?: any;
+  department?: any;
+  program?: any;
+}
+export interface PartialPayRoll {
+  id?: any;
+  empName?: any;
+  empId?: any;
+  year?: any;
+  month?: any;
+  contractValue?: any;
+  primarySalary	?: any;
+  bookAndResearch?: any;
+  academicBase?: any;
+  stamp?: any;
+  theBaseSubjectTax?: any;
+  personalTax?: any;
+  finalNetSalary?: any;
+  finalNetSalaryBeforeDiscount?: any;
+  finalSalaryDeduction?: any;
+  finalSalaryAfterDeduction?: any;
+  employeeCost?: any;
+  startingSalary?:any;
+  livingExpense?:any;
+  housingExpense?:any;
+  deportationExpense?:any;
+  valid?: any;
+}
+export interface Role {
+  id?: any;
+  academicEmp?: any;
+  adminEmp?: any;
+  academicPayRoll?: any;
+  adminPayRoll?: any;
+  packagePayRoll?: any;
+  trainingPayRoll?: any;
+  reports?: any;
+  absence?: any;
+  advance?: any;
+  partial?: any;
+  settings?: any;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -136,6 +216,9 @@ export class SettingsService {
   /// PerformanceIncentives
   getPerformanceIncentives(type: any = null): Observable<any[]> {
     return this.http.get<PerformanceIncentive[]>(this.common.PerformanceIncentiveUrl);
+  }
+  getPerformanceIncentive(type: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PerformanceIncentiveByNameUrl+"/"+type).toPromise();
   }
   addPerformanceIncentive(PerformanceIncentive: any): Promise<any> {
     return this.http.post<any>(this.common.PerformanceIncentiveUrl, PerformanceIncentive).toPromise();
@@ -267,7 +350,7 @@ export class SettingsService {
     return this.http.put<any>(this.common.TaxOnVariableAllowanceUrl + "/" + TaxOnVariableAllowance.id, TaxOnVariableAllowance).toPromise();
   }
 
-  //////////
+  ////////// StampBase
 
   getStampBases(type: any = null): Observable<any[]> {
     return this.http.get<StampBase[]>(this.common.StampBaseUrl);
@@ -288,7 +371,7 @@ export class SettingsService {
     return this.http.put<any>(this.common.StampBaseUrl + "/" + StampBase.id, StampBase).toPromise();
   }
 
-  //////////
+  ////////// StampSign
 
   getStampSigns(type: any = null): Observable<any[]> {
     return this.http.get<StampSign[]>(this.common.StampSignUrl);
@@ -309,10 +392,13 @@ export class SettingsService {
     return this.http.put<any>(this.common.StampSignUrl + "/" + StampSign.id, StampSign).toPromise();
   }
 
-  //////////
+  //////////BooksAndResearch
 
   getBooksAndResearchs(type: any = null): Observable<any[]> {
     return this.http.get<StampBase[]>(this.common.BooksAndResearchUrl);
+  }
+  getBooksAndResearch(type: any = null): Promise<any> {
+    return this.http.get<any>(this.common.BooksAndResearchByNameUrl+"/"+type).toPromise();
   }
   addBooksAndResearch(BooksAndResearch: any): Promise<any> {
     return this.http.post<any>(this.common.BooksAndResearchUrl, BooksAndResearch).toPromise();
@@ -340,8 +426,8 @@ export class SettingsService {
   getPackagePayRolls(type: any = null): Observable<any[]> {
     return this.http.get<StampBase[]>(this.common.PackageUrl);
   }
-  getPackagePayRollById([PackageId]: any = null,PayRollMonth: any = null): Promise<any> {
-    return this.http.get<any>(this.common.PackagePayRolByIdUrl+"/"+PackageId+'/'+PayRollMonth).toPromise();
+  getPackagePayRollById([PackageId]: any = null,PayRollMonth: any = null,PayRollYear: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PackagePayRolByIdUrl+"/"+PackageId+'/'+PayRollMonth+'/'+PayRollYear).toPromise();
   }
 
   addPackagePayRoll(Package: any): Promise<any> {
@@ -381,8 +467,8 @@ export class SettingsService {
   async getTrainingPayRollss(id: any = null): Promise<any> {
     return this.http.get<TrainingPayRoll[]>(this.common.TrainingPayRolUrl+"/"+id);
   }
- getTrainingPayRollById(id: any = null,month: any = null): Promise<any> {
-    return this.http.get<any>(this.common.TrainingPayRolByIdUrl+"/"+id+'/'+month).toPromise();
+ getTrainingPayRollById(id: any = null,month: any = null,year: any = null): Promise<any> {
+    return this.http.get<any>(this.common.TrainingPayRolByIdUrl+"/"+id+'/'+month+"/"+year).toPromise();
   }
 
   addTrainingPayRoll(TrainingPayRoll: any): Promise<any> {
@@ -413,4 +499,137 @@ export class SettingsService {
     return this.http.put<any>(this.common.DepartmentUrl + "/" + Department.id, Department).toPromise();
   }
 
+  ///////////////// Absence
+  getAbsences(type: any = null): Observable<any[]> {
+    return this.http.get<DegreeRoller[]>(this.common.DegreeRollerUrl);
+  }
+  async getAbsenceByName(name: any = null,month:any = null): Promise<any> {
+    return this.http.get<any>(this.common.AbsenceByNameAndMonthUrl+"/"+name+"/"+month).toPromise();
+  }
+  async getAbsenceByEmpId(EmpId: any = null): Promise<any> {
+    return this.http.get<any>(this.common.AbsenceByEmpId+"/"+EmpId).toPromise();
+  }
+  addAbsence(Absence: any): Promise<any> {
+    return this.http.post<any>(this.common.AbsenceUrl, Absence).toPromise();
+  }
+  deleteAbsence(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.AbsenceUrl + "/" + id).toPromise();
+  }
+  editAbsence(Absence: any): Promise<any> {
+    return this.http.put<any>(this.common.AbsenceUrl + "/" + Absence.id, Absence).toPromise();
+  }
+
+
+  ////////////////////// Advance
+
+  getAdvances(type: any = null): Observable<any[]> {
+    return this.http.get<Advance[]>(this.common.AdvanceUrl);
+  }
+  async getAdvanceByName(name: any = null,month:any = null): Promise<any> {
+    return this.http.get<any>(this.common.AdvanceByNameAndMonthUrl+"/"+name+"/"+month).toPromise();
+  }
+  async getAdvanceByEmpId(EmpId: any = null): Promise<any> {
+    return this.http.get<any>(this.common.AdvanceByEmpId+"/"+EmpId).toPromise();
+  }
+  addAdvance(Advance: any): Promise<any> {
+    return this.http.post<any>(this.common.AdvanceUrl, Advance).toPromise();
+  }
+  deleteAdvance(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.AdvanceUrl + "/" + id).toPromise();
+  }
+  editAdvance(Advance: any): Promise<any> {
+    return this.http.put<any>(this.common.AdvanceUrl + "/" + Advance.id, Advance).toPromise();
+  }
+
+  ////////////////////// AdvanceAccount
+
+  getAdvanceAccounts(type: any = null): Observable<any[]> {
+    return this.http.get<Advance[]>(this.common.AdvanceAccountUrl);
+  }
+  async getAdvanceAccountByName(name: any = null,month:any = null): Promise<any> {
+    return this.http.get<any>(this.common.AdvanceAccountByNameAndMonthUrl+"/"+name+"/"+month).toPromise();
+  }
+  async getAdvanceAccountByEmpId(EmpId: any = null): Promise<any> {
+    return this.http.get<any>(this.common.AdvanceAccountByEmpId+"/"+EmpId).toPromise();
+  }
+  addAdvanceAccount(AdvanceAccount: any): Promise<any> {
+    return this.http.post<any>(this.common.AdvanceAccountUrl, AdvanceAccount).toPromise();
+  }
+  deleteAdvanceAccount(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.AdvanceUrl + "/" + id).toPromise();
+  }
+  editAdvanceAccount(AdvanceAccount: any): Promise<any> {
+    return this.http.put<any>(this.common.AdvanceAccountUrl + "/" + AdvanceAccount.id, AdvanceAccount).toPromise();
+  }
+
+  //////// Allowance
+
+  getAllowances(type: any = null): Promise<any> {
+    return this.http.get<any>(this.common.AllowanceUrl).toPromise();
+  }
+  getAllowancesByName(name: any = null): Observable<any[]> {
+    return this.http.get<Allowance[]>(this.common.AllowanceByNameUrl+"/"+name);
+  }
+  addAllowance(Allowance: any): Promise<any> {
+    return this.http.post<any>(this.common.AllowanceUrl, Allowance).toPromise();
+  }
+  deleteAllowance(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.AllowanceUrl + "/" + id).toPromise();
+  }
+  editAllowance(Allowance: any): Promise<any> {
+    return this.http.put<any>(this.common.AllowanceUrl + "/" + Allowance.id, Allowance).toPromise();
+  }
+
+  //////////////////// Partial
+
+  getPartials(type: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialUrl).toPromise();
+  }
+  getPartialsByName(name: any = null): Observable<any[]> {
+    return this.http.get<Allowance[]>(this.common.PartialByNameUrl+"/"+name);
+  }
+  addPartial(Partial: any): Promise<any> {
+    return this.http.post<any>(this.common.PartialUrl, Partial).toPromise();
+  }
+  deletePartial(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.PartialUrl + "/" + id).toPromise();
+  }
+  editPartial(Partial: any): Promise<any> {
+    return this.http.put<any>(this.common.PartialUrl + "/" + Partial.id, Partial).toPromise();
+  }
+
+  /////////////////// PartialPayRoll
+  getPartialPayRolls(type: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialPayRollUrl).toPromise();
+  }
+  getPartialPayRollByName(name: any = null): Observable<any[]> {
+    return this.http.get<Allowance[]>(this.common.PartialPayRollByNameUrl+"/"+name);
+  }
+  getPartialPayRollByIdAndMonth(id: any = null,month: any = null,year: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialPayRollByIdAndMonthUrl+"/"+id+"/"+month+"/"+year).toPromise();
+  }
+  addPartialPayRoll(PartialPayRoll: any): Promise<any> {
+    return this.http.post<any>(this.common.PartialPayRollUrl, PartialPayRoll).toPromise();
+  }
+  deletePartialPayRoll(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.PartialPayRollUrl + "/" + id).toPromise();
+  }
+  editPartialPayRoll(PartialPayRoll: any): Promise<any> {
+    return this.http.put<any>(this.common.PartialPayRollUrl + "/" + PartialPayRoll.id, PartialPayRoll).toPromise();
+  }
+
+  //////////////////// Role
+
+  getRoles(type: any = null): Promise<any> {
+    return this.http.get<any>(this.common.RoleUrl).toPromise();
+  }
+  addRole(Role: any): Promise<any> {
+    return this.http.post<any>(this.common.RoleUrl, Role).toPromise();
+  }
+  deleteRole(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.RoleUrl + "/" + id).toPromise();
+  }
+  editRole(Role: any): Promise<any> {
+    return this.http.put<any>(this.common.RoleUrl + "/" + Role.id, Role).toPromise();
+  }
 }

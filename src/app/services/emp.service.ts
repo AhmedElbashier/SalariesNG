@@ -29,7 +29,7 @@ export class EmpService {
   ) { }
 
   getEmps(type: any = null): Observable<any[]> {
-    return this.http.get<Emp[]>(this.common.EmpUrl);
+    return this.http.get<any>(this.common.EmpUrl);
   }
   getEmp(EmpId: any = null): Observable<Emp> {
     return this.http.get<Emp>(this.common.EmpUrl+"/"+EmpId);

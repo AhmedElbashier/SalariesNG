@@ -71,6 +71,18 @@ import { PackagePayrollDetailsComponent } from './pages/package-payroll-details/
 import { TrainingPayrollDetailsComponent } from './pages/training-payroll-details/training-payroll-details.component';
 import { TrainingInvoiceComponent } from './pages/training-payroll-details/training-invoice/training-invoice.component';
 import { PackageInvoiceComponent } from './pages/package-payroll-details/package-invoice/package-invoice.component';
+import { AdminInvoiceOneComponent } from './pages/admin-payroll-details/admin-invoice-one/admin-invoice-one.component';
+import { AdminInvoiceTwoComponent } from './pages/admin-payroll-details/admin-invoice-two/admin-invoice-two.component';
+import { AcademicInvoiceOneComponent } from './pages/academic-payroll-details/academic-invoice-one/academic-invoice-one.component';
+import { AcademicInvoiceTwoComponent } from './pages/academic-payroll-details/academic-invoice-two/academic-invoice-two.component';
+import { AdvancesComponent } from './pages/settings/advances/advances.component';
+import { AbsenceComponent } from './pages/settings/absence/absence.component';
+import { AdvanceDetailsComponent } from './pages/settings/advance-details/advance-details.component';
+import { AllowanceComponent } from './pages/settings/allowance/allowance.component';
+import { PartialComponent } from './pages/settings/partial/partial.component';
+import { PartialPayRollComponent } from './pages/partial-pay-roll/partial-pay-roll.component';
+import { PartialPayRollDetailsComponent } from './pages/partial-pay-roll-details/partial-pay-roll-details.component';
+import { PartialInvoiceComponent } from './pages/partial-pay-roll-details/partial-invoice/partial-invoice.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -111,7 +123,19 @@ import { PackageInvoiceComponent } from './pages/package-payroll-details/package
     PackagePayrollDetailsComponent,
     TrainingPayrollDetailsComponent,
     TrainingInvoiceComponent,
-    PackageInvoiceComponent
+    PackageInvoiceComponent,
+    AdminInvoiceOneComponent,
+    AdminInvoiceTwoComponent,
+    AcademicInvoiceOneComponent,
+    AcademicInvoiceTwoComponent,
+    AdvancesComponent,
+    AbsenceComponent,
+    AdvanceDetailsComponent,
+    AllowanceComponent,
+    PartialComponent,
+    PartialPayRollComponent,
+    PartialPayRollDetailsComponent,
+    PartialInvoiceComponent
   ],
   imports: [
     BrowserModule,

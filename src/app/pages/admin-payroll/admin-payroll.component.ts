@@ -14,6 +14,7 @@ import { Emp, EmpService } from '../../services/emp.service';
 })
 export class AdminPayrollComponent {
 
+  y!:any
   Emps!: Emp[];
   selectedEmps!: Emp[];
   representatives!: any[];
@@ -53,7 +54,8 @@ export class AdminPayrollComponent {
   }
   async detailsD(month: any) {
     localStorage.setItem("RollMonth", month);
-    this.payRoll = await this.payRollService.getPayRollPromise(localStorage.getItem("EmpId"),localStorage.getItem("RollMonth"));
+    this.y= new Date().getFullYear().toString();
+    this.payRoll = await this.payRollService.getPayRollPromise(localStorage.getItem("EmpId"),localStorage.getItem("RollMonth"),this.y);
     if (Object.keys(this.payRoll).length===0||this.payRoll[0].valid=='0') {
       this.router.navigate(["dashboard/adminPayrollDetails"]);
     }

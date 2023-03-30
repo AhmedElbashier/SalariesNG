@@ -1,0 +1,175 @@
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="اضافة" icon="pi pi-plus" class="p-button-success p-mr-2"
+        (click)="openNew()"></button> &nbsp;&nbsp;&nbsp;&nbsp;
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <button pButton pRipple label="تصدير" icon="pi pi-upload" class="p-button-help" (click)="exportExcel()"></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="Partials" [rows]="10" [paginator]="true"
+    [globalFilterFields]="['name','Partial.name','Partial.name','status']" [(selection)]="selectedPackages"
+    [rowHover]="true" dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-m-0">ادارة الحزمة </h5>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="بحث..." />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="id">الرقم <p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">اسم الموظف <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">قيمة العقد الجزئي <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">قيمة الراتب الأساسي <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">قيمة مدخل الدرجة <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">قيمة البدل الأكاديمي <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">قيمة التكليف الإداري <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">العمليات</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-Partial>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="Partial"></p-tableCheckbox>
+        </td>
+        <td>{{Partial.id}}</td>
+        <td>{{Partial.name}}</td>
+        <td>{{Partial.contractValue}}</td>
+        <td>{{Partial.primarySalary}}</td>
+        <td>{{Partial.academicAllowance}}</td>
+        <td>{{Partial.administrativeAssignment}}</td>
+        <td>{{Partial.degreeRoller}}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+            (click)="editPackages(Partial)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+            (click)="deletePackages(Partial)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        يوجد عدد {{Partials ? Partials.length : 0 }} من الموظفين.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="PackagesDialog" [style]="{width: '450px'}" header="بيانات الحزمة" [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="Packagename">اسم الموظف</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.name" required autofocus />
+    </div>
+
+    <div class="p-field">
+      <label for="Packagename">قيمة العقد الجزئي</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.contractValue" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">قيمة الراتب الأساسي</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.primarySalary" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">قيمة مدخل الدرجة</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.academicAllowance" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">قيمة البدل الأكاديمي</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.administrativeAssignment" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">قيمة التكليف الإداري</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.degreeRoller" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">القسم</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.department" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">البرنامج</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.program" required autofocus />
+    </div>
+    <div class="p-field">
+      <label for="Packagename">نسبة الخبرة</label>
+      <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.exp" required autofocus />
+    </div>
+
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+      (click)="savePackages(Partial)"></button>
+    <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+
+
+
+<p-dialog [(visible)]="PackagesEditDialog" [style]="{width: '450px'}" header="بيانات الحزمة" [modal]="true"
+styleClass="p-fluid">
+<ng-template pTemplate="content">
+  <div class="p-field">
+    <label for="Packagename">اسم الموظف</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.name" required autofocus />
+  </div>
+
+  <div class="p-field">
+    <label for="Packagename">قيمة العقد الجزئي</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.contractValue" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">قيمة الراتب الأساسي</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.primarySalary" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">قيمة مدخل الدرجة</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.academicAllowance" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">قيمة البدل الأكاديمي</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.administrativeAssignment" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">قيمة التكليف الإداري</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.degreeRoller" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">القسم</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.department" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">البرنامج</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.program" required autofocus />
+  </div>
+  <div class="p-field">
+    <label for="Packagename">نسبة الخبرة</label>
+    <input type="text" pInputText id="Packagename" [(ngModel)]="Partial.exp" required autofocus />
+  </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+      (click)="editPackagesD(Partial)"></button>
+    <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
