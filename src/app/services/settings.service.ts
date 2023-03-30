@@ -1,5 +1,3 @@
-import { PayRoll } from 'src/app/services/payroll.service';
-import { User } from './user.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
@@ -128,11 +126,12 @@ export interface Absence {
 }
 export interface Advance {
   id?: any;
-  empName?: any;
   empId?: any;
+  empName?: any;
+  period?: any;
   amount?: any;
   periodLeft?: any;
-  period?: any;
+  periodTotal?: any;
 }
 export interface AdvanceAccount {
   id?: any;
@@ -544,7 +543,7 @@ export class SettingsService {
   ////////////////////// AdvanceAccount
 
   getAdvanceAccounts(type: any = null): Observable<any[]> {
-    return this.http.get<Advance[]>(this.common.AdvanceAccountUrl);
+    return this.http.get<AdvanceAccount[]>(this.common.AdvanceAccountUrl);
   }
   async getAdvanceAccountByName(name: any = null,month:any = null): Promise<any> {
     return this.http.get<any>(this.common.AdvanceAccountByNameAndMonthUrl+"/"+name+"/"+month).toPromise();

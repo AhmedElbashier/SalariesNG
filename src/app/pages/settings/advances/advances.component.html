@@ -100,7 +100,8 @@
               {{Emp.type}}
           </td>
           <td style="text-align: center">
-              <button pButton type="button" class="p-button-secondary" icon="pi pi-cog" (click)="details(Emp.id)"></button>
+              <button pButton type="button" class="p-button-secondary" icon="pi pi-cog" (click)="details(Emp)"></button> &nbsp;
+              <button pButton type="button" class="p-button-primary" icon="pi pi-file" (click)="more(Emp)"></button>
               <!-- &nbsp;<button pButton type="button" class="p-button-danger" icon="pi pi-trash" (click)="delete(Emp)"></button> -->
           </td>
       </tr>
@@ -234,7 +235,7 @@
   </ng-template>
   <ng-template pTemplate="footer">
     <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
-      (click)="saveAbsence()"></button>
+      (click)="saveAdvance()"></button>
     <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
   </ng-template>
 </p-dialog>
