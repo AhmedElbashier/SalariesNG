@@ -58,10 +58,13 @@ export class AdvancesComponent implements OnInit {
     this.advance = await this.settingService.getAdvanceByEmpId(Emp.id);
     if (Object.keys(this.advance).length === 0) {
       this.EmpDialog = true;
+      this.onReject();
       this.advancexists = false;
     } else {
       this.showConfirm();
       this.advancexists = true;
+      this.EmpDialog = false;
+
     }
   }
   exportExcel() {
