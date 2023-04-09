@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -8,7 +8,7 @@ import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-allowance',
   templateUrl: './allowance.component.html',
-  styleUrls: ['./allowance.component.scss']
+  styleUrls: ['./allowance.component.scss'],
 })
 export class AllowanceComponent {
   AllowancesDialog!: boolean;
@@ -27,18 +27,33 @@ export class AllowanceComponent {
     private settingService: SettingsService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
   ngOnInit() {
     this.Delete = 'حذف';
+    this.getData();
+  }
+  getData() {
     this.settingService.getAllowances().then(
       (res: any) => {
         this.Allowances = res;
+        this.cdr.detectChanges();
+        console.log('Sucess', res);
       },
-      (error) => console.log(error)
+      (error) => {
+        console.log(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'تم',
+          detail:
+            'حدث خطأ في عرض البيانات, الرجاء التحقق من الاتصال بقاعدة البيانات',
+          life: 3000,
+        });
+      }
     );
   }
   openNew() {
@@ -57,18 +72,29 @@ export class AllowanceComponent {
       header: 'تأكيد  ',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.Allowances = this.Allowances.filter(
-          (val) => val.id !== Allowances.id
+        this.settingService.deleteAllowance(Allowances.id).then(
+          (res) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'تم بنجاح',
+              detail: 'تم حذف نوع البدلات',
+              life: 3000,
+            });
+            this.Allowances = this.Allowances.filter(
+              (val) => val.id !== Allowances.id
+            );
+          },
+          (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'فشل',
+              detail: 'حدث خطأ ',
+              life: 3000,
+            });
+          }
         );
-        this.settingService.deleteAllowance(Allowances.id);
         this.Allowance = {};
-        this.messageService.add({
-          severity: 'success',
-          summary: 'تم بنجاح',
-          detail: 'تم حذف نوع البدلات',
-          life: 3000,
-        });
-        this.reloadCurrentRoute();
+        this.getData();
       },
     });
   }
@@ -78,31 +104,53 @@ export class AllowanceComponent {
     this.submitted = false;
   }
   editAllowancesD(Allowances: Allowance) {
-    this.settingService.editAllowance(Allowances);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت تعديل نوع البدلات بنجاح',
-      life: 3000,
-    });
+    this.settingService.editAllowance(Allowances).then(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت تعديل نوع البدلات بنجاح',
+          life: 3000,
+        });
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.Allowances = [...this.Allowances];
     this.AllowancesDialog = false;
     this.Allowance = {};
-    this.reloadCurrentRoute();
+    this.getData();
   }
   saveAllowances(Allowances: Allowance) {
     this.submitted = true;
-    this.settingService.addAllowance(Allowances);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت اضافة نوع البدلات بنجاح',
-      life: 3000,
-    });
+    this.settingService.addAllowance(Allowances).then(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت اضافة نوع البدلات بنجاح',
+          life: 3000,
+        });
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.Allowances = [...this.Allowances];
     this.AllowancesDialog = false;
     this.Allowance = {};
-    this.reloadCurrentRoute();
+    this.getData();
   }
 
   findIndexById(id: string): number {
@@ -113,10 +161,8 @@ export class AllowanceComponent {
         break;
       }
     }
-
     return index;
   }
-
   createId(): string {
     let id = '';
     var chars =
@@ -126,23 +172,12 @@ export class AllowanceComponent {
     }
     return id;
   }
-
-  // exportPdf() {
-  //     import("jspdf").then(jsPDF => {
-  //         import("jspdf-autotable").then(x => {
-  //             const doc = new jsPDF.default(0,0);
-  //             doc.autoTable(this.exportColumns, this.Allowancess);
-  //             doc.save('Allowancess.pdf');
-  //         })
-  //     })
-  // }
-
   exportExcel() {
     const xlsx = 'xlsx';
     import(xlsx).then((xlsx) => {
       const worksheet = xlsx.utils.json_to_sheet(this.Allowances);
       const workbook = {
-        Sheets: { "البدلات": worksheet },
+        Sheets: { البدلات: worksheet },
         SheetNames: ['البدلات'],
       };
       const excelBuffer: any = xlsx.write(workbook, {
@@ -164,12 +199,5 @@ export class AllowanceComponent {
       data,
       fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
     );
-  }
-
-  reloadCurrentRoute() {
-    // let currentUrl = this.router.url;
-    // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-    //   this.router.navigate(['dashboard/settings/Allowancess']);
-    // });
   }
 }

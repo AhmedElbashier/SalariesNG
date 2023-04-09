@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -27,18 +27,35 @@ export class DepartmentComponent {
     private settingService: SettingsService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
+
   ) {}
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
   ngOnInit() {
     this.Delete = 'حذف';
+    this.getData();
+  }
+  getData()
+  {
     this.settingService.getDepartments().subscribe(
       (res: any) => {
         this.Departments = res;
+        this.cdr.detectChanges();
+        console.log('Sucess', res);
       },
-      (error) => console.log(error)
+      (error) => {
+        console.log(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'تم',
+          detail:
+            'حدث خطأ في عرض البيانات, الرجاء التحقق من الاتصال بقاعدة البيانات',
+          life: 3000,
+        });
+      }
     );
   }
   openNew() {
@@ -52,23 +69,36 @@ export class DepartmentComponent {
   }
   deleteDepartments(Departments: Department) {
     this.confirmationService.confirm({
-      message:
-        'هل انت متأكد من أنك تريد حذف القسم  ' + Departments.name + '؟',
+      message: 'هل انت متأكد من أنك تريد حذف القسم  ' + Departments.name + '؟',
       header: 'تأكيد  ',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.Departments = this.Departments.filter(
-          (val) => val.id !== Departments.id
+
+        this.settingService.deleteDepartment(Departments.id).then(
+          (res) =>
+          {
+            this.Departments = this.Departments.filter(
+              (val) => val.id !== Departments.id
+            );
+            this.messageService.add({
+              severity: 'success',
+              summary: 'تم بنجاح',
+              detail: 'تم حذف القسم',
+              life: 3000,
+            });
+          },
+          (error) =>
+          {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'فشل',
+              detail: 'حدث خطأ ',
+              life: 3000,
+            });
+          }
         );
-        this.settingService.deleteDepartment(Departments.id);
         this.Department = {};
-        this.messageService.add({
-          severity: 'success',
-          summary: 'تم بنجاح',
-          detail: 'تم حذف القسم',
-          life: 3000,
-        });
-        this.reloadCurrentRoute();
+        this.getData();
       },
     });
   }
@@ -78,31 +108,57 @@ export class DepartmentComponent {
     this.submitted = false;
   }
   editDepartmentsD(Departments: Department) {
-    this.settingService.editDepartment(Departments);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت تعديل القسم بنجاح',
-      life: 3000,
-    });
+    this.settingService.editDepartment(Departments).then(
+      (res) =>
+      {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت تعديل القسم بنجاح',
+          life: 3000,
+        });
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.Departments = [...this.Departments];
     this.DepartmentsDialog = false;
     this.Department = {};
-    this.reloadCurrentRoute();
+    this.getData();
   }
   saveDepartments(Departments: Department) {
     this.submitted = true;
-    this.settingService.addDepartment(Departments);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت اضافة القسم بنجاح',
-      life: 3000,
-    });
+    this.settingService.addDepartment(Departments).then(
+      (res) =>
+      {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت اضافة القسم بنجاح',
+          life: 3000,
+        });
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.Departments = [...this.Departments];
     this.DepartmentsDialog = false;
     this.Department = {};
-    this.reloadCurrentRoute();
+    this.getData();
   }
 
   findIndexById(id: string): number {
@@ -113,10 +169,8 @@ export class DepartmentComponent {
         break;
       }
     }
-
     return index;
   }
-
   createId(): string {
     let id = '';
     var chars =
@@ -126,17 +180,6 @@ export class DepartmentComponent {
     }
     return id;
   }
-
-  // exportPdf() {
-  //     import("jspdf").then(jsPDF => {
-  //         import("jspdf-autotable").then(x => {
-  //             const doc = new jsPDF.default(0,0);
-  //             doc.autoTable(this.exportColumns, this.Departmentss);
-  //             doc.save('Departmentss.pdf');
-  //         })
-  //     })
-  // }
-
   exportExcel() {
     const xlsx = 'xlsx';
     import(xlsx).then((xlsx) => {
@@ -152,7 +195,6 @@ export class DepartmentComponent {
       this.saveAsExcelFile(excelBuffer, 'القسمين');
     });
   }
-
   saveAsExcelFile(buffer: any, fileName: string): void {
     let EXCEL_TYPE =
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -164,12 +206,5 @@ export class DepartmentComponent {
       data,
       fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
     );
-  }
-
-  reloadCurrentRoute() {
-    // let currentUrl = this.router.url;
-    // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-    //   this.router.navigate(['dashboard/settings/Departmentss']);
-    // });
   }
 }

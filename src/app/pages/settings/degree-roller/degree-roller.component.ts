@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -34,18 +34,36 @@ export class DegreeRollerComponent {
     private settingService: SettingsService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
+
   ) {}
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
   ngOnInit() {
     this.Delete = 'حذف';
+    this.getData();
+
+  }
+  getData()
+  {
     this.settingService.getDegreeRollers().subscribe(
       (res: any) => {
         this.DegreeRollers = res;
+        this.cdr.detectChanges();
+        console.log('Sucess', res);
       },
-      (error) => console.log(error)
+      (error) => {
+        console.log(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'تم',
+          detail:
+            'حدث خطأ في عرض البيانات, الرجاء التحقق من الاتصال بقاعدة البيانات',
+          life: 3000,
+        });
+      }
     );
   }
   openNew() {
@@ -71,18 +89,31 @@ export class DegreeRollerComponent {
       header: 'تأكيد  ',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.DegreeRollers = this.DegreeRollers.filter(
-          (val) => val.id !== DegreeRollers.id
+
+        this.settingService.deleteDegreeRoller(DegreeRollers.id).then(
+          (res) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'تم بنجاح',
+              detail: 'تم حذف مدخل الدرجة',
+              life: 3000,
+            });
+            this.DegreeRollers = this.DegreeRollers.filter(
+              (val) => val.id !== DegreeRollers.id
+            );
+          },
+          (error) =>
+          {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'فشل',
+              detail: 'حدث خطأ ',
+              life: 3000,
+            });
+          }
         );
-        this.settingService.deleteDegreeRoller(DegreeRollers.id);
         this.DegreeRoller = {};
-        this.messageService.add({
-          severity: 'success',
-          summary: 'تم بنجاح',
-          detail: 'تم حذف مدخل الدرجة',
-          life: 3000,
-        });
-        this.reloadCurrentRoute();
+        this.getData();
       },
     });
   }
@@ -92,31 +123,56 @@ export class DegreeRollerComponent {
     this.submitted = false;
   }
   editDegreeRollersD(DegreeRollers: DegreeRoller) {
-    this.settingService.editDegreeRoller(DegreeRollers);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت تعديل مدخل الدرجة بنجاح',
-      life: 3000,
-    });
+    this.settingService.editDegreeRoller(DegreeRollers).then(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت تعديل مدخل الدرجة بنجاح',
+          life: 3000,
+        });
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
+
     this.DegreeRollers = [...this.DegreeRollers];
     this.DegreeRollersDialog = false;
     this.DegreeRoller = {};
-    this.reloadCurrentRoute();
+    this.getData();
   }
   saveDegreeRollers(DegreeRollers: DegreeRoller) {
     this.submitted = true;
-    this.settingService.addDegreeRoller(DegreeRollers);
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت اضافة مدخل الدرجة بنجاح',
-      life: 3000,
-    });
+    this.settingService.addDegreeRoller(DegreeRollers).then(
+      (res) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت اضافة مدخل الدرجة بنجاح',
+          life: 3000,
+        });
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.DegreeRollers = [...this.DegreeRollers];
     this.DegreeRollersDialog = false;
     this.DegreeRoller = {};
-    this.reloadCurrentRoute();
+    this.getData();
   }
 
   findIndexById(id: string): number {
@@ -182,12 +238,5 @@ export class DegreeRollerComponent {
       data,
       fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION
     );
-  }
-
-  reloadCurrentRoute() {
-    // let currentUrl = this.router.url;
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //     this.router.navigate(['dashboard/settings/DegreeRollerss']);
-    // });
   }
 }

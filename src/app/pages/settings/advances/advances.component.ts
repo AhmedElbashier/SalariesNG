@@ -3,7 +3,7 @@ import {
   Advance,
   AdvanceAccount,
 } from './../../../services/settings.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Emp, EmpService } from 'src/app/services/emp.service';
@@ -38,20 +38,36 @@ export class AdvancesComponent implements OnInit {
     private settingService: SettingsService,
     private EmpService: EmpService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private cdr: ChangeDetectorRef
+
   ) {}
   async ngOnInit(): Promise<void> {
     {
       this.advanceAccount = {} as AdvanceAccount;
       this.advance = {} as Advance;
       this.advance2 = {} as Advance;
-      await this.EmpService.getEmps().subscribe(
-        (res: any) => {
-          this.Emps = res;
-        },
-        (error) => console.log(error)
-      );
+      this.getData();
     }
+  }
+  async getData()
+  {
+    await this.EmpService.getEmps().subscribe(
+      (res: any) => {
+        this.Emps = res;
+        this.cdr.detectChanges();
+        console.log('Sucess', res);
+      },
+      (error) => {
+        console.log(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'تم',
+          detail:
+            'حدث خطأ في عرض البيانات, الرجاء التحقق من الاتصال بقاعدة البيانات',
+          life: 3000,
+        });
+      });
   }
   async details(Emp: any) {
     this.Emp = { ...Emp };
@@ -64,7 +80,6 @@ export class AdvancesComponent implements OnInit {
       this.showConfirm();
       this.advancexists = true;
       this.EmpDialog = false;
-
     }
   }
   exportExcel() {
@@ -140,15 +155,49 @@ export class AdvancesComponent implements OnInit {
       console.log(this.advance2);
       console.log(this.advanceAccount);
 
-      this.settingService.addAdvance(this.advance2);
-      this.settingService.addAdvanceAccount(this.advanceAccount);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'تم بنجاح',
-        detail: 'تمت اضافة السلفية بنجاح',
-        life: 3000,
-      });
+      this.settingService.addAdvance(this.advance2).then(
+        (res) =>
+        {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'تم بنجاح',
+            detail: 'تمت اضافة السلفية بنجاح',
+            life: 3000,
+          });
+        },
+        (error) =>
+        {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'فشل',
+            detail: 'حدث خطأ ',
+            life: 3000,
+          });
+        }
+      );
+      this.settingService.addAdvanceAccount(this.advanceAccount).then(
+        (res) =>
+        {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'تم بنجاح',
+            detail: 'تمت اضافة السلفية بنجاح',
+            life: 3000,
+          });
+        },
+        (error) =>
+        {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'فشل',
+            detail: 'حدث خطأ ',
+            life: 3000,
+          });
+        }
+      );
       this.EmpDialog = false;
+      this.getData();
+
     } else if (this.advancexists === true) {
       this.advanceAccount = await this.settingService.getAdvanceAccountByEmpId(
         this.Emp.id
@@ -170,25 +219,59 @@ export class AdvancesComponent implements OnInit {
 
       ///////////////////////////////////////////////////////////////////////////////
 
-      this.settingService.addAdvance(this.advance2);
-      this.settingService.editAdvanceAccount(this.advanceAccount);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'تم بنجاح',
-        detail: 'تمت اضافة السلفية بنجاح',
-        life: 3000,
-      });
+      this.settingService.addAdvance(this.advance2).then(
+        (res) =>
+        {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'تم بنجاح',
+            detail: 'تمت اضافة السلفية بنجاح',
+            life: 3000,
+          });
+        },
+        (error) =>
+        {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'فشل',
+            detail: 'حدث خطأ ',
+            life: 3000,
+          });
+        }
+      );;
+      this.settingService.editAdvanceAccount(this.advanceAccount).then(
+        (res) =>
+        {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'تم بنجاح',
+            detail: 'تمت اضافة السلفية بنجاح',
+            life: 3000,
+          });
+        },
+        (error) =>
+        {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'فشل',
+            detail: 'حدث خطأ ',
+            life: 3000,
+          });
+        }
+      );;
+
       this.EmpDialog = false;
       this.Emp = {};
+      this.getData();
+
     }
   }
   hideDialog() {
     this.EmpDialog = false;
     this.Emp = {};
   }
-  more(Emp:any)
-  {
-    this.router.navigate(["dashboard/advanceDetails"]);
-    localStorage.setItem("AdvanceEmpId",Emp.id);
+  more(Emp: any) {
+    this.router.navigate(['dashboard/advanceDetails']);
+    localStorage.setItem('AdvanceEmpId', Emp.id);
   }
 }

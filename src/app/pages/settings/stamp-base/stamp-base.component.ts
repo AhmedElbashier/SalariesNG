@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -24,18 +24,33 @@ cols!: any[];
 
 exportColumns!: any[];
 
-constructor(private settingService: SettingsService, private messageService: MessageService, private confirmationService: ConfirmationService,private router:Router) { }
+constructor(private cdr: ChangeDetectorRef,private settingService: SettingsService, private messageService: MessageService, private confirmationService: ConfirmationService,private router:Router) { }
 applyFilterGlobal($event: any, stringVal: any) {
     this.dt!.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
 }
 ngOnInit() {
     this.Delete = "حذف";
-    this.settingService.getStampBases().subscribe(
-        (res: any) => {
-            this.StampBases = res
-        },
-        (error) => console.log(error));
-        
+    this.getData();
+}
+getData()
+{
+  this.settingService.getStampBases().subscribe(
+    (res: any) => {
+        this.StampBases = res;
+        this.cdr.detectChanges();
+        console.log('Sucess', res);
+    },
+    (error) => {
+        console.log(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'تم',
+          detail:
+            'حدث خطأ في عرض البيانات, الرجاء التحقق من الاتصال بقاعدة البيانات',
+          life: 3000,
+        });
+      }
+  );
 }
 openNew() {
 
@@ -53,11 +68,25 @@ deleteStampBases(StampBases: StampBase) {
         header: 'تأكيد  ',
         icon: 'pi pi-exclamation-triangle',
         accept: () => {
-            this.StampBases = this.StampBases.filter(val => val.id !== StampBases.id);
-            this.settingService.deleteStampBase(StampBases.id);
+            this.settingService.deleteStampBase(StampBases.id).then(
+              (res) =>
+              {
+                this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'تم حذف الدمغة', life: 3000 });
+                this.StampBases = this.StampBases.filter(val => val.id !== StampBases.id);
+
+              },
+              (error) =>
+              {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'فشل',
+                  detail: 'حدث خطأ ',
+                  life: 3000,
+                });
+              }
+            );
             this.StampBase = {};
-            this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'تم حذف الدمغة', life: 3000 });
-            this.reloadCurrentRoute();
+            this.getData();
         }
     });
 }
@@ -67,24 +96,50 @@ hideDialog() {
     this.submitted = false;
 }
 editStampBasesD(StampBases: StampBase) {
-    this.settingService.editStampBase(StampBases);
-    this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'تمت تعديل الدمغة بنجاح', life: 3000 });
+    this.settingService.editStampBase(StampBases).then(
+      (res) =>
+      {
+        this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'تمت تعديل الدمغة بنجاح', life: 3000 });
+
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.StampBases = [...this.StampBases];
     this.StampBasesDialog = false;
     this.StampBase = {};
-    this.reloadCurrentRoute();
+    this.getData();
 }
 saveStampBases(StampBases: StampBase) {
     this.submitted = true;
-    this.settingService.addStampBase(StampBases);
-    this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تمت اضافة الدمغة بنجاح', life: 3000 });
+    this.settingService.addStampBase(StampBases).then(
+      (res) =>
+      {
+        this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تمت اضافة الدمغة بنجاح', life: 3000 });
+
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.StampBases = [...this.StampBases];
     this.StampBasesDialog = false;
     this.StampBase = {};
-    this.reloadCurrentRoute();
+    this.getData();
 }
-
-
 findIndexById(id: string): number {
     let index = -1;
     for (let i = 0; i < this.StampBases.length; i++) {
@@ -93,10 +148,8 @@ findIndexById(id: string): number {
             break;
         }
     }
-
     return index;
 }
-
 createId(): string {
     let id = '';
     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -105,17 +158,6 @@ createId(): string {
     }
     return id;
 }
-
-// exportPdf() {
-//     import("jspdf").then(jsPDF => {
-//         import("jspdf-autotable").then(x => {
-//             const doc = new jsPDF.default(0,0);
-//             doc.autoTable(this.exportColumns, this.StampBasess);
-//             doc.save('StampBasess.pdf');
-//         })
-//     })
-// }
-
 exportExcel() {
     const xlsx = "xlsx";
     import(xlsx).then(xlsx => {
@@ -123,7 +165,7 @@ exportExcel() {
         const workbook = { Sheets: { 'الدمغات على المرتب الأساسي': worksheet }, SheetNames: ['الدمغات على المرتب الأساسي'] };
         const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
         this.saveAsExcelFile(excelBuffer, "الدمغات على المرتب الأساسي");
-        
+
     });
 }
 
@@ -135,11 +177,4 @@ saveAsExcelFile(buffer: any, fileName: string): void {
     });
     FileSaver.saveAs(data,fileName + "_export_" + new Date().getTime() + EXCEL_EXTENSION);
 }
-
-reloadCurrentRoute() {
-    // let currentUrl = this.router.url;
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //     this.router.navigate(['dashboard/settings/StampBasess']);
-    // });
-  }
 }

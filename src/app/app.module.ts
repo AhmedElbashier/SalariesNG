@@ -83,6 +83,9 @@ import { PartialComponent } from './pages/settings/partial/partial.component';
 import { PartialPayRollComponent } from './pages/partial-pay-roll/partial-pay-roll.component';
 import { PartialPayRollDetailsComponent } from './pages/partial-pay-roll-details/partial-pay-roll-details.component';
 import { PartialInvoiceComponent } from './pages/partial-pay-roll-details/partial-invoice/partial-invoice.component';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -138,6 +141,10 @@ import { PartialInvoiceComponent } from './pages/partial-pay-roll-details/partia
     PartialInvoiceComponent
   ],
   imports: [
+    LoggerModule.forRoot({
+    serverLoggingUrl: 'http://localhost:3000/acmst/logs',
+    level: NgxLoggerLevel.DEBUG,
+    serverLogLevel: NgxLoggerLevel.ERROR}),
     BrowserModule,
     RouterModule,
     CheckboxModule,
@@ -180,8 +187,9 @@ import { PartialInvoiceComponent } from './pages/partial-pay-roll-details/partia
     ChartModule,
     DataViewModule,
     ChipModule,
+
   ],
-  providers: [MessageService,ConfirmationService],
+  providers: [MessageService,ConfirmationService,{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
