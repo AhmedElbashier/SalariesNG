@@ -109,13 +109,38 @@ export class UsersComponent {
     });
     this.user = {};
   }
-
   hideDialog() {
     this.userDialog = false;
     this.submitted = false;
   }
   editUserD(user: User) {
-    this.userService.editUser(user).then(
+    this.user = {...user};
+    if(this.user.role==="مدير")
+    {
+      this.user.roleId ='1';
+
+    }
+    else if(this.user.role==="ادخال")
+    {
+      this.user.roleId ='2';
+
+    }
+    else if(this.user.role==="صرف")
+    {
+      this.user.roleId ='3';
+
+    }
+    else if(this.user.role==="تقارير")
+    {
+      this.user.roleId ='4';
+
+    }
+    else if(this.user.role==="سلفيات")
+    {
+      this.user.roleId ='5';
+    }
+
+    this.userService.editUser(this.user).then(
       (res: any) => {
         console.log('Success', res);
         this.messageService.add({
@@ -140,15 +165,53 @@ export class UsersComponent {
     this.user = {};
   }
   saveUser(user: User) {
+    this.user = {...user}
     this.submitted = true;
-    this.userService.addUser(user);
+    if(this.user.role==="مدير")
+    {
+      this.user.roleId ='1';
+
+    }
+    else if(this.user.role==="ادخال")
+    {
+      this.user.roleId ='2';
+
+    }
+    else if(this.user.role==="صرف")
+    {
+      this.user.roleId ='3';
+
+    }
+    else if(this.user.role==="تقارير")
+    {
+      this.user.roleId ='4';
+
+    }
+    else if(this.user.role==="سلفيات")
+    {
+      this.user.roleId ='5';
+    }
+    this.userService.addUser(this.user).then(
+      (res) =>
+      {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'تم بنجاح',
+          detail: 'تمت اضافة المستخدم بنجاح',
+          life: 3000,
+        });
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'فشل',
+          detail: 'حدث خطأ ',
+          life: 3000,
+        });
+      }
+    );
     this.getData();
-    this.messageService.add({
-      severity: 'success',
-      summary: 'تم بنجاح',
-      detail: 'تمت اضافة المستخدم بنجاح',
-      life: 3000,
-    });
     this.users = [...this.users];
     this.userDialog = false;
     this.user = {};

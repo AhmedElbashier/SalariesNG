@@ -17,7 +17,7 @@ export class LoginComponent {
   ngOnInit(): void {
           localStorage.removeItem("Name");
           localStorage.removeItem("Username");
-          localStorage.removeItem("Role");
+          localStorage.removeItem("RoleId");
           localStorage.removeItem("LastLogin");
   }
 
@@ -36,6 +36,7 @@ export class LoginComponent {
           localStorage.setItem("Name",this.users[0].name);
           localStorage.setItem("Username",this.users[0].username);
           localStorage.setItem("Role",this.users[0].role);
+          localStorage.setItem("RoleId",this.users[0].roleId);
           localStorage.setItem("LastLogin",Date.now().toString());
           this.messageService.add({ severity: 'success', summary: 'تم التحقق', detail: 'مرحبا بك', life: 3000 });
           this.router.navigate(["dashboard/statiscs"]);

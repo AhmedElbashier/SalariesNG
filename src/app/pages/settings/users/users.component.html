@@ -38,6 +38,8 @@
                 </th>
                 <th pSortableColumn="password">كلمة المرور <p-sortIcon field="Password"></p-sortIcon>
                 </th>
+                <th pSortableColumn="password">نوع الصلاحية <p-sortIcon field="Password"></p-sortIcon>
+                </th>
 
                 <th></th>
             </tr>
@@ -51,6 +53,7 @@
                 <td>{{user.name}}</td>
                 <td>{{user.username}}</td>
                 <td>************</td>
+                <td>{{user.role}}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
                         (click)="editUser(user)"></button>
@@ -98,6 +101,9 @@
                 <option>
                     تقارير
                 </option>
+                <option>
+                  سلفيات
+              </option>
             </select>
         </div>
     </ng-template>
@@ -140,6 +146,9 @@
                 <option>
                     تقارير
                 </option>
+                <option>
+                  سلفيات
+              </option>
             </select>
         </div>
     </ng-template>

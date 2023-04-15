@@ -24,7 +24,7 @@ export class DashboardComponent {
 
   ngOnInit(): void {
 
-    this.roleId = localStorage.getItem("Role");
+    this.roleId = localStorage.getItem("RoleId");
     if(this.roleId =="1")
     {
       this.items = [

@@ -10,6 +10,7 @@ export interface User {
   username?: any;
   password?: any;
   role?: any;
+  roleId?: any;
 }
 @Injectable({
   providedIn: "root"
