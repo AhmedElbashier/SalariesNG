@@ -29,7 +29,14 @@ export class AdminEmpComponent {
         this.Emps = res
         // this.loading = false;
       },
-      (error) => console.log(error));
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'حطأ',
+          detail: 'توجد مشكلة في التواصل مع قاعدة البيانات   ',
+          life: 3000,
+        });
+      });
     this.statuses = [
       { label: 'true', value: 'عقد ساري' },
       { label: 'false', value: 'عقد مغلق' },

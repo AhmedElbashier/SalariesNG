@@ -38,7 +38,7 @@ export class LoginComponent {
           localStorage.setItem("Role",this.users[0].role);
           localStorage.setItem("LastLogin",Date.now().toString());
           this.messageService.add({ severity: 'success', summary: 'تم التحقق', detail: 'مرحبا بك', life: 3000 });
-          this.router.navigate(["dashboard/"]);
+          this.router.navigate(["dashboard/statiscs"]);
           }
           else {
             this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'خطأ في كلمة المرور', life: 3000 });

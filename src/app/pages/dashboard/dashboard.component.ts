@@ -71,7 +71,19 @@ export class DashboardComponent {
         {
           label: 'السلفيات',
           icon: 'pi pi-fw pi-users',
-          routerLink: 'advance',
+          items:
+          [
+            {
+              label: 'سلفيات الموظفين',
+              icon: 'pi pi-fw pi-users',
+              routerLink: 'advance',
+            },
+            {
+              label: 'السلفيات الجزئيين',
+              icon: 'pi pi-fw pi-users',
+              routerLink: 'partialAdvance',
+            }
+          ]
         },
         {
           label: 'الغياب والتأخير',
@@ -106,6 +118,11 @@ export class DashboardComponent {
               label: 'نسبة الأداء للإداريين',
               icon: 'pi pi-fw pi-paperclip',
               routerLink: 'settings/adminsRate',
+            },
+            {
+              label: 'قيمة التكليف الإداري للأكاديمين',
+              icon: 'pi pi-fw pi-paperclip',
+              routerLink: 'settings/adminAssign',
             },
             {
               label: 'حافز الخبرة الداخلية',
@@ -303,7 +320,19 @@ export class DashboardComponent {
         {
           label: 'السلفيات',
           icon: 'pi pi-fw pi-users',
-          routerLink: 'advance',
+          items:
+          [
+            {
+              label: 'سلفيات الموظفين',
+              icon: 'pi pi-fw pi-users',
+              routerLink: 'advance',
+            },
+            {
+              label: 'السلفيات الجزئيين',
+              icon: 'pi pi-fw pi-users',
+              routerLink: 'partialAdvance',
+            }
+          ]
         },
         {
           label: 'الغياب والتأخير',

@@ -30,17 +30,20 @@ export class AdminPayrollComponent {
   payRoll!: PayRoll[];
   constructor(private router: Router, private payRollService: PayRollService, private EmpService: EmpService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
   ngOnInit(): void {
-    // this.MonthlDialog = true;
-
     this.loading = false;
-
     this.tt = "إداري";
     this.EmpService.getEmpsByTt(this.tt).subscribe(
       (res: any) => {
         this.Emps = res
-        // this.loading = false;
       },
-      (error) => console.log(error));
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'حطأ',
+          detail: 'توجد مشكلة في التواصل مع قاعدة البيانات   ',
+          life: 3000,
+        });
+      });
     this.statuses = [
       { label: 'true', value: 'عقد ساري' },
       { label: 'false', value: 'عقد مغلق' },
@@ -53,6 +56,17 @@ export class AdminPayrollComponent {
     this.MonthlDialog = true;
   }
   async detailsD(month: any) {
+    if(month == null)
+    {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'حطأ',
+        detail: 'الرجاء تحديد الشهر اولاً',
+        life: 3000,
+      });
+    }
+    else
+    {
     localStorage.setItem("RollMonth", month);
     this.y= new Date().getFullYear().toString();
     this.payRoll = await this.payRollService.getPayRollPromise(localStorage.getItem("EmpId"),localStorage.getItem("RollMonth"),this.y);
@@ -63,17 +77,16 @@ export class AdminPayrollComponent {
       this.messageService.add({ severity: 'errro', summary: 'حطأ', detail: 'تم صرف مرتب هذا الشهر من قبل', life: 3000 });
       this.MonthlDialog=false;
     }
+    }
   }
   hideDialog() {
     this.EmpDialog = false;
     this.MonthlDialog = false;
-
   }
   new() {
     this.router.navigate(["dashboard/adminNew"]);
   }
   delete(Emp: Emp) {
-
     this.confirmationService.confirm({
       message: 'هل انت متأكد من أنك تريد العقار باسم المالك  ' + Emp.name + '؟',
       header: 'تأكيد  ',
@@ -86,15 +99,12 @@ export class AdminPayrollComponent {
         this.reloadCurrentRoute();
       }
     });
-
   }
-
   reloadCurrentRoute() {
     let currentUrl = this.router.url;
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['dashboard/adminEmp']);
     });
-
   }
   exportExcel() {
     const newLocal = "xlsx";
@@ -103,10 +113,8 @@ export class AdminPayrollComponent {
       const workbook = { Sheets: { 'العقارات': worksheet }, SheetNames: ['العقارات'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, "العقارات");
-
     });
   }
-
   saveAsExcelFile(buffer: any, fileName: string): void {
     let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     let EXCEL_EXTENSION = '.xlsx';

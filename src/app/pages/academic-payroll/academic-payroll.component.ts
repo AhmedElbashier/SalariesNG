@@ -26,40 +26,54 @@ export class AcademicPayrollComponent {
   tt!:any;
   constructor(private router: Router, private EmpService: EmpService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
   ngOnInit(): void {
-    // this.MonthlDialog = true;
-
     this.loading = false;
     this.tt= "أكاديمي";
     this.EmpService.getEmpsByTt(this.tt).subscribe(
       (res: any) => {
         this.Emps = res
-        // this.loading = false;
       },
-      (error) => console.log(error));
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'حطأ',
+          detail: 'توجد مشكلة في التواصل مع قاعدة البيانات   ',
+          life: 3000,
+        });
+      });
     this.statuses = [
       { label: 'true', value: 'عقد ساري' },
       { label: 'false', value: 'عقد مغلق' },
     ]
   }
-
   details(id: any) {
     localStorage.setItem("EmpId", id);
     this.MonthlDialog = true;
   }
   detailsD(month: any) {
+    if(month == null)
+    {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'حطأ',
+        detail: 'الرجاء تحديد الشهر اولاً',
+        life: 3000,
+      });
+    }
+    else
+    {
     localStorage.setItem("RollMonth", month);
     this.router.navigate(["dashboard/academicPayrollDetails"]);
+    }
   }
   hideDialog() {
     this.EmpDialog = false;
     this.MonthlDialog = false;
-
   }
   new() {
     this.router.navigate(["dashboard/academicNew"]);
   }
   delete(Emp: Emp) {
-
     this.confirmationService.confirm({
       message: 'هل انت متأكد من أنك تريد العقار باسم المالك  ' + Emp.name + '؟',
       header: 'تأكيد  ',
@@ -72,9 +86,7 @@ export class AcademicPayrollComponent {
           this.reloadCurrentRoute();
       }
   });
-
   }
-
   reloadCurrentRoute() {
     let currentUrl = this.router.url;
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -86,13 +98,12 @@ export class AcademicPayrollComponent {
     const newLocal = "xlsx";
     import(newLocal).then(xlsx => {
       const worksheet = xlsx.utils.json_to_sheet(this.Emps);
-      const workbook = { Sheets: { 'العقارات': worksheet }, SheetNames: ['العقارات'] };
+      const workbook = { Sheets: { 'أكاديمين': worksheet }, SheetNames: ['أكاديمين  '] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-      this.saveAsExcelFile(excelBuffer, "العقارات");
+      this.saveAsExcelFile(excelBuffer, "أكاديمين");
 
     });
   }
-
   saveAsExcelFile(buffer: any, fileName: string): void {
     let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     let EXCEL_EXTENSION = '.xlsx';
@@ -101,10 +112,6 @@ export class AcademicPayrollComponent {
     });
     FileSaver.saveAs(data, fileName + "_export_" + new Date().getTime() + EXCEL_EXTENSION);
   }
-
-
-
-  
   submit()
   {
     this.MonthlDialog = false;

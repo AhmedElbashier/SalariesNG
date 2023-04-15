@@ -41,8 +41,15 @@ export class PartialPayRollComponent {
       (res: any) => {
         this.Partials = res;
       },
-      (error) => console.log(error)
-    );
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'حطأ',
+          detail: 'توجد مشكلة في التواصل مع قاعدة البيانات   ',
+          life: 3000,
+        });
+      });
+
   }
   openNew() {
     this.Partial = {};
@@ -79,6 +86,12 @@ export class PartialPayRollComponent {
     this.Partial = Partial;
   }
   async detailsD(month: any) {
+    if(this.month == null)
+    {
+      this.messageService.add({ severity: 'errro', summary: 'حطأ', detail: 'الرجاء تحديد الشهر ', life: 3000 });
+    }
+    else
+    {
     const y= new Date().getFullYear().toString();
     this.PartialPayRolls = await this.settingService.getPartialPayRollByIdAndMonth(this.Partial.id,month,y);
     if (Object.keys(this.PartialPayRolls).length===0) {
@@ -97,13 +110,18 @@ export class PartialPayRollComponent {
     }
     else
     {
-      this.messageService.add({ severity: 'errro', summary: 'حطأ', detail: 'تم صرف مرتب هذا الشهر من قبل', life: 3000 });
+      this.messageService.add({ severity: 'warn', summary: 'حطأ', detail: 'تم صرف مرتب هذا الشهر من قبل', life: 3000 });
       this.MonthDialog=false;
     }
+    }
+
   }
   hideDialog() {
     this.PartialsDialog = false;
     this.submitted = false;
+    this.PartialsEditDialog = false;
+    this.MonthDialog = false;
+
   }
   editPartialsD(Partials: Partial) {
     this.settingService.editPartial(Partials);
@@ -151,7 +169,6 @@ export class PartialPayRollComponent {
     }
     return id;
   }
-
   exportExcel() {
     const xlsx = 'xlsx';
     import(xlsx).then((xlsx) => {
@@ -164,7 +181,6 @@ export class PartialPayRollComponent {
       this.saveAsExcelFile(excelBuffer, 'الجزئيين');
     });
   }
-
   saveAsExcelFile(buffer: any, fileName: string): void {
     let EXCEL_TYPE =
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';

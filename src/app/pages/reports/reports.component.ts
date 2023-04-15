@@ -45,7 +45,6 @@ export class ReportsComponent implements OnInit {
   Emps!: Emp[];
   Dept!: Department;
   Depts!: Department[];
-  // doc!: jsPDF;
   month!: any;
   year!: any;
 

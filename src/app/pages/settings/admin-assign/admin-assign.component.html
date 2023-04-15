@@ -1,0 +1,133 @@
+<div lang="ar" dir="rtl">
+
+  <div class="surface-section px-4 py-5 md:px-6 lg:px-8">
+      <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
+          <li>
+              <a class="text-500 no-underline line-height-3 cursor-pointer">الاعدادات</a>
+          </li>
+          <li class="px-2">
+              <i class="pi pi-angle-right text-500 line-height-3"></i>
+          </li>
+          <li>
+              <span class="text-900 line-height-2">قيمة التكليف للموظفين الأكاديمين</span>
+          </li>
+      </ul>
+
+  </div>
+
+
+  <div class="card">
+  </div>
+
+  <p-table #dt [value]="Emps" [(selection)]="selectedEmps" dataKey="id" styleClass="p-datatable-Emps"
+      [rowHover]="true" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
+      [loading]="loading" responsiveLayout="scroll" [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [filterDelay]="0"
+      [globalFilterFields]="['name','country.name','representative.name','status']">
+      <ng-template pTemplate="caption">
+          <div class="table-header">
+              الموظفين الأكاديمين
+              <br>
+              <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <!-- <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Global Search" /> -->
+              </span>
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width: 3rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th pSortableColumn="Emp.id">
+                  الرقم
+                  <p-sortIcon field="Emp.id"></p-sortIcon>
+              </th>
+              <th pSortableColumn="Emp.name" style="width: 25rem;">
+                  اسم الموظف
+                  <p-sortIcon field="Emp.name"></p-sortIcon>
+              </th>
+              <th pSortableColumn="Emp.exp">
+                  عدد سنين الخبرة
+                  <p-sortIcon field="Emp.exp"></p-sortIcon>
+              </th>
+              <th pSortableColumn="Emp.internalExp">
+                  عدد سنين الخبرة الداخلية
+                  <p-sortIcon field="Emp.internalExp"></p-sortIcon>
+              </th>
+              <th pSortableColumn="Emp.type">
+                  نوع التوظيف
+                  <p-sortIcon field="Emp.type"></p-sortIcon>
+              </th>
+              <th pSortableColumn="Emp.type">
+                قيمة التكليف الإداري
+                <p-sortIcon field="Emp.type"></p-sortIcon>
+            </th>
+              <th style="width: 18rem">العمليات</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-Emp>
+          <tr class="p-selectable-row">
+              <td>
+                  <p-tableCheckbox [value]="Emp"></p-tableCheckbox>
+              </td>
+              <td>
+                  <span class="p-column-title">الرقم</span>
+                  {{Emp.id}}
+              </td>
+              <td>
+                  <span class="p-column-title">اسم الموظف</span>
+                  {{Emp.name}}
+              </td>
+              <td>
+                  <span class="p-column-title">عدد سنين الخبرة</span>
+                  {{Emp.exp}}
+              </td>
+              <td>
+                  <span class="p-column-title">عدد سنين الخبرة الداخلية</span>
+                  {{Emp.internalExp}}
+              </td>
+              <td>
+                  <span class="p-column-title">نوع التوظيف</span>
+                  {{Emp.type}}
+              </td>
+              <td>
+                <span class="p-column-title">قيمة التكليف</span>
+                {{Emp.adminAssign}}
+            </td>
+              <td style="text-align: center">
+                  <button pButton type="button" class="p-button-secondary" icon="pi pi-cog"
+                      (click)="details(Emp)"></button>
+                  <!-- &nbsp;<button pButton type="button" class="p-button-danger" icon="pi pi-trash" (click)="delete(Emp)"></button> -->
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+          <tr>
+              <td colspan="8">لا يوجد موظفين</td>
+          </tr>
+      </ng-template>
+  </p-table>
+  <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+  <p-dialog [(visible)]="detailDialog" [style]="{width: '450px'}" header="بيانات الأداء" [modal]="true"
+      styleClass="p-fluid">
+      <ng-template pTemplate="content">
+          <div class="p-field">
+              <label for="name">اسم الموظف</label>
+              <input id="Emp.name" [(ngModel)]="detail.name" name="Emp.name" type="text" readonly pInputText
+                  class="w-full mb-3">
+          </div>
+          <div class="p-field">
+              <label for="detail.adminAssign">قيمة التكليف</label>
+              <input type="text" pInputText id="detail.adminAssign" [(ngModel)]="detail.adminAssign" required autofocus />
+          </div>
+
+      </ng-template>
+      <ng-template pTemplate="footer">
+          <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
+              (click)="editEmpD(detail)"></button>
+          <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text"
+              (click)="hideDialog()"></button>
+      </ng-template>
+  </p-dialog>

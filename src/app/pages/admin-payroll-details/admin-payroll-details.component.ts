@@ -1,4 +1,4 @@
-import { PerformanceIncentive, Absence, Allowance } from './../../services/settings.service';
+import { PerformanceIncentive, Absence, Allowance, Advance, AdvanceAccount } from './../../services/settings.service';
 import { ConstantPool, VariableBinding } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -76,7 +76,12 @@ export class AdminPayrollDetailsComponent {
   allowanceV3!:any;
   allowanceV4!:any;
   allowanceV5!:any;
-
+  advance!: Advance[];
+  advanceAccount!: AdvanceAccount[];
+  advanceTotal!:any;
+  advancePeriod!:any;
+  advanceBaseTotal!:any;
+  advanceVariableTotal!:any;
   constructor(private router: Router, private settingService: SettingsService,private payRollService:PayRollService, private EmpService: EmpService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
   async ngOnInit(): Promise<void> {
     {
@@ -103,6 +108,17 @@ export class AdminPayrollDetailsComponent {
       this.theBaseSubjectTax = parseFloat(this.degreeRoller[0].primarySalary) - parseFloat(this.firstInsuracneResult);
       this.theBaseSubjectTax = parseFloat(this.theBaseSubjectTax) - parseFloat(this.stampBase[0].value);
       this.absenceValue = parseInt(this.degreeRoller[0].value) / 192;
+      this.advance = await this.settingService.getAdvanceByEmpId(this.id);
+      if(this.advance.length>0)
+      {
+        this.advanceAccount = await this.settingService.getAdvanceAccountByEmpId(this.id);
+      }
+      else
+      {
+        console.log("Advance Account Error");
+      }
+      console.log(this.advance);
+      console.log(this.advanceAccount);
       if(Object(this.absence).keys.length!=0)
       {
       this.hours = this.absence[0].hours;
@@ -208,14 +224,17 @@ export class AdminPayrollDetailsComponent {
       this.absenceLastValue = parseFloat(this.absenceLastValue) * parseFloat(this.absenceValueAfterDeduction);
       this.absenceLastValue = parseInt(this.absenceLastValue.toFixed());
       }
-
+      this.advancePeriod = parseInt(this.advanceAccount[0].lastMonth) - parseInt (this.advanceAccount[0].firstMonth);
+      this.advanceTotal = parseInt(this.advanceAccount[0].debit) / parseInt(this.advancePeriod);
+      this.advanceBaseTotal = parseFloat(this.payRoll.primarySalary) * 0.15;
+      this.advanceVariableTotal = parseInt(this.advanceTotal) - parseInt(this.advanceBaseTotal);
       this.discountsTotal = parseInt(this.payRoll.firstInsurance)+parseInt(this.payRoll.stampBase)+parseInt(this.payRoll.personalTax);
       this.discountsSecondTotal = parseInt(this.payRoll.lastInsurance) + parseInt(this.payRoll.stampSign)+parseInt(this.payRoll.taxOnVariableAllowanceResult);
       this.FirstTableTotal = parseFloat(this.degreeRoller[0].primarySalary) - parseFloat(this.discountsTotal);
-      this.FirstTableTotal = parseFloat(this.FirstTableTotal) - parseFloat(this.absenceLastValue);
+      this.FirstTableTotal = parseFloat(this.FirstTableTotal) - parseFloat(this.absenceLastValue) - parseFloat(this.advanceBaseTotal);
       this.taxAbsenceLastValue= parseFloat(this.absenceValueCalc) - parseFloat(this.absenceLastValue);
       this.SecondTableTotal = parseInt(this.variableTax) -  parseInt (this.taxAbsenceLastValue);
-      this.SecondTableTotal = parseInt(this.SecondTableTotal) - parseInt(this.discountsSecondTotal);
+      this.SecondTableTotal = parseInt(this.SecondTableTotal) - parseInt(this.discountsSecondTotal)- parseFloat (this.advanceVariableTotal);
       this.lastAllTotalRoll = parseInt(this.FirstTableTotal) + parseInt(this.SecondTableTotal);
       this.lastAllTotalRoll= parseInt(this.lastAllTotalRoll.toFixed()).toLocaleString();
       this.FirstTableTotal= parseInt(this.FirstTableTotal.toFixed()).toLocaleString();
@@ -247,22 +266,53 @@ export class AdminPayrollDetailsComponent {
       this.payRoll.taxAbsenceLastValue = this.taxAbsenceLastValue;
       this.payRoll.discountsSecondTotal = this.discountsSecondTotal;
       this.payRoll.lastAllTotalRoll = this.lastAllTotalRoll;
-
+      this.payRoll.bookAndResearch = '0';
       this.payRolls= [this.payRoll];
-
       }
     }
 
   payRollP(payRoll:any)
   {
-    this.payRollService.addPayRoll(payRoll);
-    this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تمت التأكيد', life: 3000 });
-    this.Disabled = true;
+    this.payRollService.addPayRoll(payRoll).subscribe
+    (
+      (res) =>
+      {
+        this.advanceAccount[0].credit = this.advanceTotal;
+        this.settingService.editAdvanceAccount(this.advanceAccount[0]).then(
+            (res) =>
+            {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'تم بنجاح',
+                detail: 'تم التأكيد',
+                life: 3000,
+              });
+            },
+            (error) =>
+            {
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'خطأ',
+                detail: 'حدث حطأ',
+                life: 3000,
+              });
+            }
+        )
+
+      },
+      (error) =>
+      {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'خطأ',
+          detail: 'حدث حطأ',
+          life: 3000,
+        });
+      }
+    );    this.Disabled = true;
   }
   print()
   {
-    if(localStorage.getItem("adminInvoicePrint1")==null)
-    {
     localStorage.setItem("adminInvoiceEmpId",this.payRoll.empId);
     localStorage.setItem("adminInvoiceEmpName",this.payRoll.empName);
     localStorage.setItem("adminInvoiceEmpDept",this.Emp.dept);
@@ -279,19 +329,13 @@ export class AdminPayrollDetailsComponent {
     localStorage.setItem("adminInvoiceHousingExpense",this.payRoll.housingExpense);
     localStorage.setItem("adminInvoiceDiscountsTotal",this.payRoll.discountsTotal);
     localStorage.setItem("adminInvoiceAbsenceLastValue",this.payRoll.absenceLastValue);
+    localStorage.setItem("adminInvoiceAdvanceBaseTotal",this.advanceBaseTotal);
     localStorage.setItem("adminInvoiceFirstTableTotal",this.payRoll.secondTableTotal);
     localStorage.setItem("adminInvoiceMonth",this.month);
     this.router.navigate(["/adminInvoiceOne"]);
-    }
-    else
-    {
-    this.messageService.add({ severity: 'warning', summary: 'فشل', detail: 'تمت الطباعة من قبل', life: 3000 });
-    }
   }
   print2()
   {
-    if(localStorage.getItem("adminInvoicePrint2")==null)
-    {
     localStorage.setItem("adminInvoiceEmpId",this.payRoll.empId);
     localStorage.setItem("adminInvoiceEmpName",this.payRoll.empName);
     localStorage.setItem("adminInvoiceEmpDept",this.Emp.dept);
@@ -301,6 +345,7 @@ export class AdminPayrollDetailsComponent {
     localStorage.setItem("adminInvoiceStampSign",this.payRoll.stampSign);
     localStorage.setItem("adminInvoiceTaxOnVariableAllowanceResult",this.payRoll.taxOnVariableAllowanceResult);
     localStorage.setItem("adminInvoiceTaxAbsenceLastValue",this.taxAbsenceLastValue);
+    localStorage.setItem("adminInvoiceAdvanceVariableTotal",this.advanceVariableTotal);
     localStorage.setItem("adminInvoiceDiscountsSecondTotal",this.payRoll.discountsSecondTotal);
     localStorage.setItem("adminInvoiceAllowance1",this.payRoll.allowance1);
     localStorage.setItem("adminInvoiceAllowance2",this.payRoll.allowance2);
@@ -315,9 +360,4 @@ export class AdminPayrollDetailsComponent {
     localStorage.setItem("adminInvoiceLastAllTotalRoll",this.payRoll.lastAllTotalRoll);
     localStorage.setItem("adminInvoiceMonth2",this.month);
     this.router.navigate(["/adminInvoiceTwo"]);}
-    else
-    {
-    this.messageService.add({ severity: 'warning', summary: 'فشل', detail: 'تمت الطباعة من قبل', life: 3000 });
-    }
-  }
 }

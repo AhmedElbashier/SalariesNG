@@ -39,6 +39,7 @@ export class AcademicInvoiceTwoComponent {
   allowanceV5!:any;
   taxOnVariableAllowanceResult!:any;
   lastAllTotalRoll!:any;
+  advanceTotal!:any;
 
   ngOnInit()
   {
@@ -67,6 +68,7 @@ export class AcademicInvoiceTwoComponent {
     this.allowanceV3 = localStorage.getItem("academicInvoiceAllowanceV3");
     this.allowanceV4 = localStorage.getItem("academicInvoiceAllowanceV4");
     this.allowanceV5 = localStorage.getItem("academicInvoiceAllowanceV5");
+    this.advanceTotal = localStorage.getItem("adminInvoiceAdvanceVariableTotal");
     this.allowanceV1 = parseInt(this.allowanceV1).toLocaleString();
     this.allowanceV2 = parseInt(this.allowanceV2).toLocaleString();
     this.allowanceV3 = parseInt(this.allowanceV3).toLocaleString();
@@ -74,13 +76,10 @@ export class AcademicInvoiceTwoComponent {
     this.allowanceV5 = parseInt(this.allowanceV5).toLocaleString();
     this.lastAllTotalRoll = localStorage.getItem("academicInvoiceLastAllTotalRoll");
     this.stampSign = parseInt(this.stampSign).toLocaleString();
+    this.advanceTotal = parseInt(this.advanceTotal).toLocaleString();
 
     this.month  =  localStorage.getItem("academicInvoiceMonth2");
     if(this.month=="1")
-    {
-      this.month="يناير";
-    }
-    else if(this.month=="2")
     {
       this.month="يناير";
     }

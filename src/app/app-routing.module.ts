@@ -48,6 +48,9 @@ import { UsersComponent } from './pages/settings/users/users.component';
 import { StatiscsComponent } from './pages/statiscs/statiscs.component';
 import { PartialPayRollDetailsComponent } from './pages/partial-pay-roll-details/partial-pay-roll-details.component';
 import { PartialInvoiceComponent } from './pages/partial-pay-roll-details/partial-invoice/partial-invoice.component';
+import { AdminAssignComponent } from './pages/settings/admin-assign/admin-assign.component';
+import { PartialAdvanceComponent } from './pages/settings/partial-advance/partial-advance.component';
+import { PartialAdvanceDetailsComponent } from './pages/settings/partial-advance-details/partial-advance-details.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
@@ -78,7 +81,9 @@ const routes: Routes = [
       { path: 'trainingPayRoll', component: TrainingPayrollComponent },
       { path: 'trainingPayRollDetails', component: TrainingPayrollDetailsComponent },
       { path: 'advance', component: AdvancesComponent },
+      { path: 'partialAdvance', component: PartialAdvanceComponent },
       { path: 'advanceDetails', component: AdvanceDetailsComponent },
+      { path: 'partialAdvanceDetails', component: PartialAdvanceDetailsComponent },
       { path: 'absence', component: AbsenceComponent },
       { path: 'partialPayRoll', component: PartialPayRollComponent },
       { path: 'partialPayRollDetails', component: PartialPayRollDetailsComponent },
@@ -130,6 +135,7 @@ const routes: Routes = [
           { path: 'personalIncomeTax', component: PersoanlIncomeTaxComponent },
           { path: 'allowance', component: AllowanceComponent },
           { path: 'partial', component: PartialComponent },
+          { path: 'adminAssign', component: AdminAssignComponent },
         ],
       },
     ],

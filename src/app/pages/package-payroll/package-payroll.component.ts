@@ -34,7 +34,14 @@ export class PackagePayrollComponent {
           (res: any) => {
               this.Packages = res
           },
-          (error) => console.log(error));
+          (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'حطأ',
+              detail: 'توجد مشكلة في التواصل مع قاعدة البيانات   ',
+              life: 3000,
+            });
+          });
 
   }
   openNew() {
@@ -75,6 +82,17 @@ export class PackagePayrollComponent {
   }
   detailsD(month:any,Package:any)
   {
+    if(month == null)
+    {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'حطأ',
+        detail: 'الرجاء تحديد الشهر اولاً',
+        life: 3000,
+      });
+    }
+    else
+    {
     if(this.package.period=="3")
 
         if(month==this.package.firstMonth||month==this.package.secondMonth||month==this.package.thirdMonth)
@@ -201,7 +219,7 @@ export class PackagePayrollComponent {
             }
           else if(month==this.package.firstMonth&&this.package.firstMonthPayRoll=="1"&&this.package.secondMonthPayRoll=="0"&&this.package.thirdMonthPayRoll=="0")
           {
-              this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'تم صرف هذا الشهر مسبقاً الرجاء اختيار الشهر التالي', life: 3000 });
+              this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'تم صرف هذا الشهر مسبقاً الرجاء اختيار الشهر التالي', life: 3000 });
 
           }
           else if(this.package.secondMonthPayRoll=="0"&&this.package.firstMonthPayRoll=="1")
@@ -226,18 +244,18 @@ export class PackagePayrollComponent {
             }
             else
             {
-              this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'الرجاء صرف مرتب الشهر السابق اولاً', life: 3000 });
+              this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'الرجاء صرف مرتب الشهر السابق اولاً', life: 3000 });
             }
 
           }
           else
           {
-              this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'لقد تم صرف كل مرتبات فترة التجزئة', life: 3000 });
+              this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'لقد تم صرف كل مرتبات فترة التجزئة', life: 3000 });
           }
         }
         else
         {
-          this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'الشهر خارج فترة التجزئة \n الرجاء اختيار الشهر مجددا', life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'الشهر خارج فترة التجزئة \n الرجاء اختيار الشهر مجددا', life: 3000 });
         }
     }
     else if (this.package.period=="1")
@@ -267,21 +285,23 @@ export class PackagePayrollComponent {
             }
           else if(month==this.package.firstMonth&&this.package.firstMonthPayRoll=="1")
           {
-              this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'لقد تم صرف هذا المرتب لأن مرتب هذه الحزمة يصرف على شهر واحد', life: 3000 });
+              this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'لقد تم صرف هذا المرتب لأن مرتب هذه الحزمة يصرف على شهر واحد', life: 3000 });
 
           }
 
         }
         else
         {
-          this.messageService.add({ severity: 'warn', summary: 'تم ', detail: 'الشهر خارج فترة التجزئة \n الرجاء اختيار الشهر مجددا', life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'تم ', detail: 'الشهر خارج فترة التجزئة \n الرجاء اختيار الشهر مجددا', life: 3000 });
         }
     }
+  }
 
   }
   hideDialog() {
       this.PackagesDialog = false;
       this.submitted = false;
+      this.MonthDialog = false;
   }
   editPackagesD(Packages: Package) {
       this.settingService.editPackage(Packages);

@@ -16,6 +16,7 @@ export interface Emp {
   dept?: any;
   tt?: any;
   rate?: any;
+  adminAssign?: any;
 }
 @Injectable({
   providedIn: 'root'
@@ -53,5 +54,4 @@ export class EmpService {
   editEmp(Emp: any): Promise<any> {
     return this.http.put<any>(this.common.EmpUrl + "/" + Emp.id, Emp).toPromise();
   }
-
 }

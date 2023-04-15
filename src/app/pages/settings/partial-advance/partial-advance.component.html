@@ -24,7 +24,7 @@
       </p-toolbar>
       </div>
 
-<p-table #dt [value]="Emps" [(selection)]="selectedEmps" dataKey="id" styleClass="p-datatable-Emps" [rowHover]="true"
+<p-table #dt [value]="Partials" [(selection)]="selectedPartials" dataKey="id" styleClass="p-datatable-Partials" [rowHover]="true"
   [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" responsiveLayout="scroll"
   [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [filterDelay]="0" [globalFilterFields]="['name','country.name','representative.name','status']">
@@ -43,66 +43,58 @@
           <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th pSortableColumn="Emp.id">
+          <th pSortableColumn="Partial.id">
                   الرقم
-                  <p-sortIcon field="Emp.id"></p-sortIcon>
+                  <p-sortIcon field="Partial.id"></p-sortIcon>
           </th>
-          <th pSortableColumn="Emp.name"style="width: 25rem;">
+          <th pSortableColumn="Partial.name"style="width: 25rem;">
                   اسم الموظف
-                  <p-sortIcon field="Emp.name"></p-sortIcon>
+                  <p-sortIcon field="Partial.name"></p-sortIcon>
           </th>
-          <th pSortableColumn="Emp.exp">
+          <th pSortableColumn="Partial.exp">
                   عدد سنين الخبرة
-                  <p-sortIcon field="Emp.exp"></p-sortIcon>
+                  <p-sortIcon field="Partial.exp"></p-sortIcon>
           </th>
-          <th pSortableColumn="Emp.internalExp">
-                  عدد سنين الخبرة الداخلية
-                  <p-sortIcon field="Emp.internalExp"></p-sortIcon>
+          <th pSortableColumn="Partial.internalExp">
+                  البرنامج
+                  <p-sortIcon field="Partial.internalExp"></p-sortIcon>
           </th>
-          <th pSortableColumn="Emp.payroyllType">
-                  طريقة الصرف
-                  <p-sortIcon field="Emp.payroyllType"></p-sortIcon>
-          </th>
-          <th pSortableColumn="Emp.type">
-                  نوع التوظيف
-                  <p-sortIcon field="Emp.type"></p-sortIcon>
+          <th pSortableColumn="Partial.payroyllType">
+                  القسم
+                  <p-sortIcon field="Partial.payroyllType"></p-sortIcon>
           </th>
           <th style="width: 18rem">العمليات</th>
       </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-Emp>
+  <ng-template pTemplate="body" let-Partial>
       <tr class="p-selectable-row">
           <td>
-              <p-tableCheckbox [value]="Emp"></p-tableCheckbox>
+              <p-tableCheckbox [value]="Partial"></p-tableCheckbox>
           </td>
           <td>
               <span class="p-column-title">الرقم</span>
-              {{Emp.id}}
+              {{Partial.id}}
           </td>
           <td>
               <span class="p-column-title">اسم الموظف</span>
-              {{Emp.name}}
+              {{Partial.name}}
           </td>
           <td>
               <span class="p-column-title">عدد سنين الخبرة</span>
-              {{Emp.exp}}
+              {{Partial.exp}}
           </td>
           <td>
-              <span class="p-column-title">عدد سنين الخبرة الداخلية</span>
-              {{Emp.internalExp}}
+              <span class="p-column-title">البرنامج</span>
+              {{Partial.program}}
           </td>
           <td>
-              <span class="p-column-title">طريقة الصرف</span>
-              {{Emp.payroyllType}}
-          </td>
-          <td>
-              <span class="p-column-title">نوع التوظيف</span>
-              {{Emp.type}}
+              <span class="p-column-title">القسم</span>
+              {{Partial.department}}
           </td>
           <td style="text-align: center">
-              <button pButton type="button" class="p-button-secondary" icon="pi pi-cog" (click)="details(Emp)"></button> &nbsp;
-              <button pButton type="button" class="p-button-primary" icon="pi pi-file" (click)="more(Emp)"></button>
-              <!-- &nbsp;<button pButton type="button" class="p-button-danger" icon="pi pi-trash" (click)="delete(Emp)"></button> -->
+              <button pButton type="button" class="p-button-secondary" icon="pi pi-cog" (click)="details(Partial)"></button> &nbsp;
+              <button pButton type="button" class="p-button-primary" icon="pi pi-file" (click)="more(Partial)"></button>
+              <!-- &nbsp;<button pButton type="button" class="p-button-danger" icon="pi pi-trash" (click)="delete(Partial)"></button> -->
           </td>
       </tr>
   </ng-template>
@@ -115,7 +107,7 @@
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 
 
-<p-dialog [(visible)]="EmpDialog" [style]="{width: '450px'}" header="الرجاء تحديد الشهر" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="PartialDialog" [style]="{width: '450px'}" header="الرجاء تحديد الشهر" [modal]="true" styleClass="p-fluid">
   <ng-template pTemplate="content">
           <div class="p-field">
               <label for="state">من شهر</label>
@@ -160,7 +152,7 @@
           </div>
           <div class="p-field">
             <label for="state">الى شهر</label>
-            <select id="state"  [(ngModel)]="secondMonth" Value="month" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+            <select id="state"  [(ngModel)]="secondMonth" Value="month2" class="w-full text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                 <option>
                     1
                 </option>
@@ -235,7 +227,7 @@
   </ng-template>
   <ng-template pTemplate="footer">
     <button pButton pRipple label="حفظ" icon="pi pi-check" class="p-button-text"
-      (click)="saveAdvance()"></button>
+      (click)="savePartialAdvance()"></button>
     <button pButton pRipple label="الغاء" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
   </ng-template>
 </p-dialog>

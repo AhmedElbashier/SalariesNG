@@ -48,7 +48,13 @@ export class CommonService {
   AdvanceByNameAndMonthUrl = this.APIUrl+"/Advance/ByNameAndMonth";
   AdvanceByEmpId = this.APIUrl+"/Advance/ByEmpId";
   AdvanceAccountUrl = this.APIUrl+"/AdvanceAccount";
+  PartialAdvanceUrl = this.APIUrl+"/PartialAdvance";
+  PartialAdvanceByNameAndMonthUrl = this.APIUrl+"/PartialAdvance/ByNameAndMonth";
+  PartialAdvanceByEmpId = this.APIUrl+"/PartialAdvance/ByEmpId";
   AdvanceAccountByNameAndMonthUrl = this.APIUrl+"/AdvanceAccount/ByNameAndMonth";
+  PartialAdvanceAccountUrl = this.APIUrl+"/PartialAdvanceAccount";
+  PartialAdvanceAccountByNameAndMonthUrl = this.APIUrl+"/PartialAdvanceAccount/ByNameAndMonth";
+  PartialAdvanceAccountByEmpId = this.APIUrl+"/PartialAdvanceAccount/ByEmpId";
   AdvanceAccountByEmpId = this.APIUrl+"/AdvanceAccount/ByEmpId";
   AllowanceUrl = this.APIUrl+"/Allowance";
   AllowanceByNameUrl = this.APIUrl+"/Allowance/ByName";

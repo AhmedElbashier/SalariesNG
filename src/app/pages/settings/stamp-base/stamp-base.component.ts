@@ -6,8 +6,8 @@ import { StampBase,SettingsService } from 'src/app/services/settings.service';
 import * as FileSaver from 'file-saver';
 @Component({
   selector: 'app-stamp-Base',
-  templateUrl: './stamp-Base.component.html',
-  styleUrls: ['./stamp-Base.component.scss']
+  templateUrl: './stamp-base.component.html',
+  styleUrls: ['./stamp-base.component.scss']
 })
 export class StampBaseComponent {
 // dt: any;

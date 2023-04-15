@@ -41,8 +41,14 @@ export class TrainingPayrollComponent {
       (res: any) => {
         this.Trainings = res;
       },
-      (error) => console.log(error)
-    );
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'حطأ',
+          detail: 'توجد مشكلة في التواصل مع قاعدة البيانات   ',
+          life: 3000,
+        });
+      });
   }
   openNew() {
     this.Training = {};
@@ -74,30 +80,48 @@ export class TrainingPayrollComponent {
     });
   }
 
-  details(Training:any) {
+  details(Training: any) {
     this.MonthDialog = true;
     this.Training = Training;
   }
   async detailsD(month: any) {
-    const y= new Date().getFullYear().toString();
-    this.TrainingPayRolls = await this.settingService.getTrainingPayRollById(this.Training.id,month,y);
-    if (Object.keys(this.TrainingPayRolls).length===0) {
-    localStorage.setItem("trainingMonth", month);
-    localStorage.setItem("trainingId", this.Training.id);
-    localStorage.setItem("trainingName", this.Training.name);
-    localStorage.setItem("trainingDept", this.Training.dept);
-    localStorage.setItem("trainingAmount", this.Training.amount);
-    this.router.navigate(["dashboard/trainingPayRollDetails"]);
-    }
-    else
-    {
-      this.messageService.add({ severity: 'errro', summary: 'حطأ', detail: 'تم صرف مرتب هذا الشهر من قبل', life: 3000 });
-      this.MonthDialog=false;
+    const y = new Date().getFullYear().toString();
+    if (month == null) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'حطأ',
+        detail: 'الرجاء تحديد الشهر اولاً',
+        life: 3000,
+      });
+    } else {
+      this.TrainingPayRolls = await this.settingService.getTrainingPayRollById(
+        this.Training.id,
+        month,
+        y
+      );
+      if (Object.keys(this.TrainingPayRolls).length === 0) {
+        localStorage.setItem('trainingMonth', month);
+        localStorage.setItem('trainingId', this.Training.id);
+        localStorage.setItem('trainingName', this.Training.name);
+        localStorage.setItem('trainingDept', this.Training.dept);
+        localStorage.setItem('trainingAmount', this.Training.amount);
+        this.router.navigate(['dashboard/trainingPayRollDetails']);
+      } else {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'حطأ',
+          detail: 'تم صرف مرتب هذا الشهر من قبل',
+          life: 3000,
+        });
+        this.MonthDialog = false;
+      }
     }
   }
   hideDialog() {
     this.TrainingsDialog = false;
     this.submitted = false;
+    this.MonthDialog = false;
+
   }
   editTrainingsD(Trainings: Training) {
     this.settingService.editTraining(Trainings);
@@ -124,7 +148,6 @@ export class TrainingPayrollComponent {
     this.TrainingsDialog = false;
     this.Training = {};
   }
-
   findIndexById(id: string): number {
     let index = -1;
     for (let i = 0; i < this.Trainings.length; i++) {
@@ -133,10 +156,8 @@ export class TrainingPayrollComponent {
         break;
       }
     }
-
     return index;
   }
-
   createId(): string {
     let id = '';
     var chars =
@@ -146,7 +167,6 @@ export class TrainingPayrollComponent {
     }
     return id;
   }
-
   exportExcel() {
     const xlsx = 'xlsx';
     import(xlsx).then((xlsx) => {
@@ -159,7 +179,6 @@ export class TrainingPayrollComponent {
       this.saveAsExcelFile(excelBuffer, 'الحزم');
     });
   }
-
   saveAsExcelFile(buffer: any, fileName: string): void {
     let EXCEL_TYPE =
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';

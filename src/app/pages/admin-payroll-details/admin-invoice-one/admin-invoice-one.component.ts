@@ -28,6 +28,7 @@ export class AdminInvoiceOneComponent {
   discountsTotal!:any;
   absenceLastValue!:any;
   firstTableTotal!:any
+  advanceTotal!:any;
   ngOnInit()
   {
     this.space = " ";
@@ -52,9 +53,11 @@ export class AdminInvoiceOneComponent {
     this.discountsTotal = localStorage.getItem("adminInvoiceDiscountsTotal");
     this.absenceLastValue = localStorage.getItem("adminInvoiceAbsenceLastValue");
     this.firstTableTotal = localStorage.getItem("adminInvoiceFirstTableTotal");
+    this.advanceTotal = localStorage.getItem("adminInvoiceAdvanceBaseTotal");
     this.primarySalary = parseInt(this.primarySalary).toLocaleString();
     this.personalTax = parseInt(this.personalTax).toLocaleString();
     this.theBaseSubjectTax = parseInt(this.theBaseSubjectTax).toLocaleString();
+    this.advanceTotal = parseInt(this.advanceTotal).toLocaleString();
 
     this.month  =  localStorage.getItem("adminInvoiceMonth");
     if(this.month=="1")

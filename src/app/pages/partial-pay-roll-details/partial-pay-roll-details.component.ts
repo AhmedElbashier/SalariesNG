@@ -1,4 +1,4 @@
-import { Partial, PartialPayRoll, BooksAndResearch } from './../../services/settings.service';
+import { Partial, PartialPayRoll, BooksAndResearch, PartialAdvance, PartialAdvanceAccount } from './../../services/settings.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -37,6 +37,12 @@ export class PartialPayRollDetailsComponent {
   stampBase!: any;
   discountsTotal!: any;
   Disabled!:boolean;
+  advance!: PartialAdvance[];
+  advanceAccount!: PartialAdvanceAccount[];
+  advanceTotal!:any;
+  advancePeriod!:any;
+  advanceBaseTotal!:any;
+  advanceVariableTotal!:any;
 
   constructor(private router: Router, private settingService: SettingsService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
   async ngOnInit(): Promise<void> {
@@ -69,7 +75,17 @@ export class PartialPayRollDetailsComponent {
     this.academicBase = parseInt(this.primarySalary) + parseInt(this.BooksAndResearchValue);
     this.netBaseSalary = parseInt(this.academicBase) - parseInt(this.stamp);
     this.theBaseSubjectTax = parseInt(this.Partial.contractValue)-parseInt(this.BooksAndResearchValue)-parseInt(this.stamp);
-
+    this.advance = await this.settingService.getPartialAdvanceByPartialId(this.Partial.id);
+      if(this.advance.length>0)
+      {
+        this.advanceAccount = await this.settingService.getPartialAdvanceAccountByPartialId(this.Partial.id);
+      }
+      else
+      {
+        console.log("Advance Account Error");
+      }
+      console.log(this.advance);
+      console.log(this.advanceAccount);
     if (this.theBaseSubjectTax >= 120000) {
       this.persoanlTaxResult = (this.theBaseSubjectTax - 120000) * 0.2 + 9000;
     }
@@ -90,6 +106,11 @@ export class PartialPayRollDetailsComponent {
     this.Deductions = parseInt(this.theBaseSubjectTax)+parseInt(this.stamp);
     this.salaryAfterDeduction = parseInt(this.theBaseSubjectTax)+parseInt(this.stamp);
     this.employeeCost = parseInt(this.salaryBeforeDeduction);
+    this.advancePeriod = parseInt(this.advanceAccount[0].lastMonth) - parseInt (this.advanceAccount[0].firstMonth);
+    this.advanceTotal = parseInt(this.advanceAccount[0].debit) / parseInt(this.advancePeriod);
+    this.advanceBaseTotal = parseFloat(this.partialPayRoll.primarySalary) * 0.15;
+    this.advanceVariableTotal = parseInt(this.advanceTotal) - parseInt(this.advanceBaseTotal);
+
 
     this.partialPayRoll.empId = this.Partial.id;
     this.partialPayRoll.empName = this.Partial.name;
@@ -120,7 +141,7 @@ export class PartialPayRollDetailsComponent {
   payRollP(partialPayRoll:any)
   {
         this.settingService.addPartialPayRoll(partialPayRoll);
-        this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تمت التأكيد', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'تم بنجاح', detail: 'تم التأكيد', life: 3000 });
         this.Disabled = true;
   }
   print()
@@ -143,6 +164,7 @@ export class PartialPayRollDetailsComponent {
     localStorage.setItem("partialInvoiceMonth",this.month);
     localStorage.setItem("partialInvoiceProgram",this.Partial.program);
     localStorage.setItem("partialInvoiceDepartment",this.Partial.department);
+    localStorage.setItem("partialInvoiceAdvanceTotal",this.advanceTotal);
     this.router.navigate(["/partialInvoice"]);
   }
 }

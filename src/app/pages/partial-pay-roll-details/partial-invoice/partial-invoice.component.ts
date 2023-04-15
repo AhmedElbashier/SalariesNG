@@ -29,6 +29,7 @@ export class PartialInvoiceComponent {
   firstTableTotal!:any
   academicBase!:any;
   BookAndResearch!:any;
+  advanceTotal!:any;
   ngOnInit()
   {
     this.space = " ";
@@ -55,6 +56,7 @@ export class PartialInvoiceComponent {
     this.firstTableTotal = localStorage.getItem("academicInvoiceFirstTableTotal");
     this.academicBase = localStorage.getItem("academicBase");
     this.BookAndResearch = localStorage.getItem("academicBookAndResearch");
+    this.advanceTotal = localStorage.getItem("partialInvoiceAdvanceTotal");
     this.primarySalary = parseInt(this.primarySalary).toLocaleString();
     this.personalTax = parseInt(this.personalTax).toLocaleString();
     this.theBaseSubjectTax = parseInt(this.theBaseSubjectTax).toLocaleString();

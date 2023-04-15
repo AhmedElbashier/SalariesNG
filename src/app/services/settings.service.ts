@@ -142,6 +142,24 @@ export interface AdvanceAccount {
   firstMonth?: any;
   lastMonth?: any;
 }
+export interface PartialAdvance {
+  id?: any;
+  empId?: any;
+  empName?: any;
+  period?: any;
+  amount?: any;
+  periodLeft?: any;
+  periodTotal?: any;
+}
+export interface PartialAdvanceAccount {
+  id?: any;
+  empName?: any;
+  empId?: any;
+  debit?: any;
+  credit?: any;
+  firstMonth?: any;
+  lastMonth?: any;
+}
 export interface Allowance {
   id?: any;
   name?: any;
@@ -561,6 +579,48 @@ export class SettingsService {
     return this.http.put<any>(this.common.AdvanceAccountUrl + "/" + AdvanceAccount.id, AdvanceAccount).toPromise();
   }
 
+  ////////////////////// PartialAdvance
+
+  getPartialAdvances(type: any = null): Observable<any[]> {
+    return this.http.get<PartialAdvance[]>(this.common.PartialAdvanceUrl);
+  }
+  async getPartialAdvanceByName(name: any = null,month:any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialAdvanceByNameAndMonthUrl+"/"+name+"/"+month).toPromise();
+  }
+  async getPartialAdvanceByPartialId(EmpId: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialAdvanceByEmpId+"/"+EmpId).toPromise();
+  }
+  addPartialAdvance(PartialAdvance: any): Promise<any> {
+    return this.http.post<any>(this.common.PartialAdvanceUrl, PartialAdvance).toPromise();
+  }
+  deletePartialAdvance(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.PartialAdvanceUrl + "/" + id).toPromise();
+  }
+  editPartialAdvance(PartialAdvance: any): Promise<any> {
+    return this.http.put<any>(this.common.PartialAdvanceUrl + "/" + PartialAdvance.id, PartialAdvance).toPromise();
+  }
+
+  ////////////////////// PartialAdvanceAccount
+
+  getPartialAdvanceAccounts(type: any = null): Observable<any[]> {
+    return this.http.get<PartialAdvanceAccount[]>(this.common.PartialAdvanceAccountUrl);
+  }
+  async getPartialAdvanceAccountByName(name: any = null,month:any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialAdvanceAccountByNameAndMonthUrl+"/"+name+"/"+month).toPromise();
+  }
+  async getPartialAdvanceAccountByPartialId(EmpId: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialAdvanceAccountByEmpId+"/"+EmpId).toPromise();
+  }
+  addPartialAdvanceAccount(PartialAdvanceAccount: any): Promise<any> {
+    return this.http.post<any>(this.common.PartialAdvanceAccountUrl, PartialAdvanceAccount).toPromise();
+  }
+  deletePartialAdvanceAccount(id: any): Promise<any> {
+    return this.http.delete<any>(this.common.PartialAdvanceUrl + "/" + id).toPromise();
+  }
+  editPartialAdvanceAccount(PartialAdvanceAccount: any): Promise<any> {
+    return this.http.put<any>(this.common.PartialAdvanceAccountUrl + "/" + PartialAdvanceAccount.id, PartialAdvanceAccount).toPromise();
+  }
+
   //////// Allowance
 
   getAllowances(type: any = null): Promise<any> {
@@ -583,6 +643,9 @@ export class SettingsService {
 
   getPartials(type: any = null): Promise<any> {
     return this.http.get<any>(this.common.PartialUrl).toPromise();
+  }
+  getPartial(id: any = null): Promise<any> {
+    return this.http.get<any>(this.common.PartialUrl+"/"+id).toPromise();
   }
   getPartialsByName(name: any = null): Observable<any[]> {
     return this.http.get<Allowance[]>(this.common.PartialByNameUrl+"/"+name);

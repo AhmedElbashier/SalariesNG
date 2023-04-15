@@ -39,6 +39,7 @@ export class AdminInvoiceTwoComponent {
   allowanceV5!:any;
   taxOnVariableAllowanceResult!:any;
   lastAllTotalRoll!:any;
+  advanceTotal!:any;
 
   ngOnInit()
   {
@@ -67,12 +68,15 @@ export class AdminInvoiceTwoComponent {
     this.allowanceV3 = localStorage.getItem("adminInvoiceAllowanceV3");
     this.allowanceV4 = localStorage.getItem("adminInvoiceAllowanceV4");
     this.allowanceV5 = localStorage.getItem("adminInvoiceAllowanceV5");
+    this.advanceTotal = localStorage.getItem("adminInvoiceAdvanceVariableTotal");
+    this.lastAllTotalRoll = localStorage.getItem("adminInvoiceLastAllTotalRoll");
     this.allowanceV1 = parseInt(this.allowanceV1).toLocaleString();
     this.allowanceV2 = parseInt(this.allowanceV2).toLocaleString();
     this.allowanceV3 = parseInt(this.allowanceV3).toLocaleString();
     this.allowanceV4 = parseInt(this.allowanceV4).toLocaleString();
     this.allowanceV5 = parseInt(this.allowanceV5).toLocaleString();
-    this.lastAllTotalRoll = localStorage.getItem("adminInvoiceLastAllTotalRoll");
+    this.advanceTotal = parseInt(this.advanceTotal).toLocaleString();
+
     this.stampSign = parseInt(this.stampSign).toLocaleString();
 
     this.month  =  localStorage.getItem("adminInvoiceMonth2");

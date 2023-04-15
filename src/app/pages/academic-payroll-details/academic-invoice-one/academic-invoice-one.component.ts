@@ -30,6 +30,8 @@ export class AcademicInvoiceOneComponent {
   firstTableTotal!:any
   academicBase!:any;
   BookAndResearch!:any;
+  advanceTotal!:any;
+
   ngOnInit()
   {
     this.space = " ";
@@ -56,9 +58,11 @@ export class AcademicInvoiceOneComponent {
     this.firstTableTotal = localStorage.getItem("academicInvoiceFirstTableTotal");
     this.academicBase = localStorage.getItem("academicBase");
     this.BookAndResearch = localStorage.getItem("academicBookAndResearch");
+    this.advanceTotal = localStorage.getItem("adminInvoiceAdvanceBaseTotal");
     this.primarySalary = parseInt(this.primarySalary).toLocaleString();
     this.personalTax = parseInt(this.personalTax).toLocaleString();
     this.theBaseSubjectTax = parseInt(this.theBaseSubjectTax).toLocaleString();
+    this.advanceTotal = parseInt(this.advanceTotal).toLocaleString();
     console.log(this.discountsTotal);
     if(this.absenceLastValue==="undefined")
     {
@@ -66,10 +70,6 @@ export class AcademicInvoiceOneComponent {
     }
     this.month  =  localStorage.getItem("academicInvoiceMonth");
     if(this.month=="1")
-    {
-      this.month="يناير";
-    }
-    else if(this.month=="2")
     {
       this.month="يناير";
     }
